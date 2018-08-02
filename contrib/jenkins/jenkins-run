@@ -5,9 +5,7 @@ function generate_passwd_file() {
   GROUP_ID=$(id -g)
 
   if [ x"$USER_ID" != x"0" -a x"$USER_ID" != x"997" ]; then
-
     echo "default:x:${USER_ID}:${GROUP_ID}:Default Application User:${HOME}:/sbin/nologin" >> /etc/passwd
-
   fi
 }
 
@@ -22,7 +20,7 @@ JENKINS_WAR="/usr/lib/jenkins/jenkins.war"
 JENKINS_CONFIG=/etc/sysconfig/jenkins
 [ -f "$JENKINS_CONFIG" ] && . "$JENKINS_CONFIG"
 JENKINS_JAVA_CMD="/usr/bin/java"
-JENKINS_JAVA_OPTIONS= "-XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap"
+JENKINS_JAVA_OPTIONS='-XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap'
 
 JAVA_CMD="$JENKINS_JAVA_CMD $JENKINS_JAVA_OPTIONS -DJENKINS_HOME=$JENKINS_HOME -jar $JENKINS_WAR"
 PARAMS="--logfile=/var/log/jenkins/jenkins.log --webroot=/var/cache/jenkins/war--daemon"
@@ -41,5 +39,5 @@ PARAMS="--logfile=/var/log/jenkins/jenkins.log --webroot=/var/cache/jenkins/war-
 if [ "$JENKINS_ENABLE_ACCESS_LOG" = "yes" ]; then
     PARAMS="$PARAMS --accessLoggerClassName=winstone.accesslog.SimpleAccessLogger --simpleAccessLogger.format=combined --simpleAccessLogger.file=/var/log/jenkins/access_log"
 fi
-
+set -x
 exec $JAVA_CMD $PARAMS
