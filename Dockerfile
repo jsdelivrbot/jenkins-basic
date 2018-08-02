@@ -13,13 +13,17 @@ COPY ./contrib/jenkins /usr/local/bin
 
 RUN set -x && \
     java -version && \
+    chmod 664 /etc/passwd && \
     chmod -R 666 /etc/sysconfig/jenkins && \
+    chgrp -R 0 /var/log/jenkins && \
     chmod -R 666 /var/log/jenkins && \
     chmod -R 666 /var/lib/jenkins && \
     chgrp -R 0 /usr/local/bin && \
     chmod -R g+rwx /usr/local/bin && \
     chgrp -R 0 /var/lib/jenkins && \
-    chmod -R g+rwX /var/lib/jenkins
+    chmod -R g+rwX /var/lib/jenkins && \
+    chgrp -R 0 /var/log && \
+    chmod -R g+rwX /var/log
 
 
 ENV JENKINS_VERSION=2 \
