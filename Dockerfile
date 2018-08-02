@@ -7,7 +7,8 @@ RUN set -x && microdnf -h && \
     echo microdnf remove libxslt gdbm python-libs python python-lxml python-javapackages  && \
     microdnf clean all && \
     rpm -qa && \
-    java -version
+    java -version && \
+    chmod 666 /etc/sysconfig/jenkins
 
 ENV JENKINS_VERSION=2 \
     HOME=/var/lib/jenkins \
@@ -22,3 +23,5 @@ LABEL io.k8s.description="Jenkins is a continuous integration server" \
       io.k8s.display-name="Jenkins 2" \
       io.openshift.tags="jenkins,jenkins2,ci" \
       io.openshift.expose-services="8080:http"
+
+USER jenkins
