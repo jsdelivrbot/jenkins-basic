@@ -12,6 +12,10 @@ RUN set -x && microdnf -h && \
 COPY ./contrib/jenkins /usr/local/bin
 
 RUN set -x && \
+    curl -so /usr/local/bin/dumb-init https://github.com/Yelp/dumb-init/releases/download/v1.2.2/dumb-init_1.2.2_amd64 && \
+    chmod 777 /usr/local/bin/dumb-init
+
+RUN set -x && \
     java -version && \
     chmod 664 /etc/passwd && \
     chmod -R 666 /etc/sysconfig/jenkins && \
