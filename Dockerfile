@@ -17,7 +17,7 @@ RUN set -x &&\
     rm -rf /tmp/oc
 
 COPY ./contrib/jenkins /usr/local/bin
-#COPY ./contrib/openshift /opt/openshift
+COPY ./contrib/openshift /opt/openshift
 
 RUN set -x && \
     curl -sLo /usr/local/bin/dumb-init https://github.com/Yelp/dumb-init/releases/download/v1.2.2/dumb-init_1.2.2_amd64 && \
@@ -34,7 +34,7 @@ ENV JENKINS_VERSION=2 \
 RUN set -x && \
     curl -sLo /usr/local/bin/jenkins-install-plugins https://raw.githubusercontent.com/openshift/jenkins/master/2/contrib/jenkins/install-plugins.sh && \
     chmod 777 /usr/local/bin/jenkins-install-plugins && \
-    /usr/local/bin/jenkins-install-plugins.sh
+    /usr/local/bin/jenkins-install-plugins /opt/openshift/plugins.txt
 
 RUN set -x && \
     java -version && \

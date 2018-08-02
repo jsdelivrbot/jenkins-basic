@@ -1,0 +1,4 @@
+openshift-login:1.0.9
+kubernetes:1.8.4
+github-branch-source:2.3.6
+cloudbees-folder:6.5.1
