@@ -16,7 +16,7 @@ RUN set -x &&\
     chmod 777 /usr/local/bin/oc && \
     rm -rf /tmp/oc
 
-COPY ./contrib/jenkins /usr/local/bin
+#COPY ./contrib/jenkins /usr/local/bin
 COPY ./contrib/openshift /opt/openshift
 
 RUN set -x && \
