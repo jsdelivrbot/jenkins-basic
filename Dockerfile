@@ -16,8 +16,8 @@ RUN set -x &&\
     chmod 777 /usr/local/bin/oc && \
     rm -rf /tmp/oc
 
-#COPY ./contrib/jenkins /usr/local/bin
-COPY ./contrib/openshift /opt/openshift
+COPY ./contrib/jenkins /usr/local/bin
+#COPY ./contrib/openshift /opt/openshift
 
 RUN set -x && \
     curl -sLo /usr/local/bin/dumb-init https://github.com/Yelp/dumb-init/releases/download/v1.2.2/dumb-init_1.2.2_amd64 && \
