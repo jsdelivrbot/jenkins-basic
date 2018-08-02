@@ -8,12 +8,33 @@ RUN set -x && microdnf -h && \
     microdnf clean all && \
     rpm -qa
 
+RUN set -x &&\
+    mkdir /tmp/oc &&\
+    curl -sLo /tmp/oc/openshift-origin-client-tools-v3.9.0-191fece-linux-64bit.tar.gz https://github.com/openshift/origin/releases/download/v3.9.0/openshift-origin-client-tools-v3.9.0-191fece-linux-64bit.tar.gz && \
+    tar -xzf /tmp/oc/openshift-origin-client-tools-v3.9.0-191fece-linux-64bit.tar.gz -C /tmp/oc  --strip-components=1 && \
+    cp /tmp/oc/oc /usr/local/bin/ && \
+    chmod 777 /usr/local/bin/oc && \
+    rm -rf /tmp/oc
 
 COPY ./contrib/jenkins /usr/local/bin
+COPY ./contrib/openshift /opt/openshift
 
 RUN set -x && \
     curl -sLo /usr/local/bin/dumb-init https://github.com/Yelp/dumb-init/releases/download/v1.2.2/dumb-init_1.2.2_amd64 && \
     chmod 777 /usr/local/bin/dumb-init
+
+ENV JENKINS_VERSION=2 \
+    HOME=/var/lib/jenkins \
+    JENKINS_HOME=/var/lib/jenkins \
+    JENKINS_UC=https://updates.jenkins.io \
+    OPENSHIFT_JENKINS_IMAGE_VERSION=3.11 \
+    LANG=en_US.UTF-8 \
+    LC_ALL=en_US.UTF-8
+
+RUN set -x && \
+    curl -sLo /usr/local/bin/jenkins-install-plugins https://raw.githubusercontent.com/openshift/jenkins/master/2/contrib/jenkins/install-plugins.sh && \
+    chmod 777 /usr/local/bin/jenkins-install-plugins && \
+    /usr/local/bin/jenkins-install-plugins.sh
 
 RUN set -x && \
     java -version && \
@@ -32,18 +53,10 @@ RUN set -x && \
     chmod -R g+rwX /var/cache/jenkins
 
 
-ENV JENKINS_VERSION=2 \
-    HOME=/var/lib/jenkins \
-    JENKINS_HOME=/var/lib/jenkins \
-    JENKINS_UC=https://updates.jenkins.io \
-    OPENSHIFT_JENKINS_IMAGE_VERSION=3.11 \
-    LANG=en_US.UTF-8 \
-    LC_ALL=en_US.UTF-8
-
-
 LABEL io.k8s.description="Jenkins is a continuous integration server" \
       io.k8s.display-name="Jenkins 2" \
       io.openshift.tags="jenkins,jenkins2,ci" \
       io.openshift.expose-services="8080:http"
 
-USER jenkins
+USER 1001
+
