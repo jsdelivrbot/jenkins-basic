@@ -23,7 +23,9 @@ RUN set -x && \
     chgrp -R 0 /var/lib/jenkins && \
     chmod -R g+rwX /var/lib/jenkins && \
     chgrp -R 0 /var/log && \
-    chmod -R g+rwX /var/log
+    chmod -R g+rwX /var/log && \
+    chgrp -R 0 /var/cache/jenkins && \
+    chmod -R g+rwX /var/cache/jenkins
 
 
 ENV JENKINS_VERSION=2 \
