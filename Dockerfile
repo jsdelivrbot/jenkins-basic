@@ -8,8 +8,8 @@ RUN set -x && microdnf -h && \
     microdnf clean all && \
     rpm -qa
 
-RUN set -x &&\
-    mkdir /tmp/oc &&\
+RUN set -x && \
+    mkdir /tmp/oc && \
     curl -sLo /tmp/oc/openshift-origin-client-tools-v3.9.0-191fece-linux-64bit.tar.gz https://github.com/openshift/origin/releases/download/v3.9.0/openshift-origin-client-tools-v3.9.0-191fece-linux-64bit.tar.gz && \
     tar -xzf /tmp/oc/openshift-origin-client-tools-v3.9.0-191fece-linux-64bit.tar.gz -C /tmp/oc  --strip-components=1 && \
     cp /tmp/oc/oc /usr/local/bin/ && \
@@ -34,7 +34,7 @@ ENV JENKINS_VERSION=2 \
 RUN set -x && \
     curl -sLo /usr/local/bin/jenkins-install-plugins https://raw.githubusercontent.com/openshift/jenkins/master/2/contrib/jenkins/install-plugins.sh && \
     chmod 777 /usr/local/bin/jenkins-install-plugins && \
-    /usr/local/bin/jenkins-install-plugins /opt/openshift/plugins.txt
+    (export REF=/var/lib/jenkins/plugins; /usr/local/bin/jenkins-install-plugins /opt/openshift/plugins.txt)
 
 RUN set -x && \
     java -version && \
