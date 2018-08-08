@@ -3,7 +3,7 @@ FROM registry.access.redhat.com/rhel7/rhel-atomic
 RUN set -x && microdnf -h && \
     curl -so /etc/yum.repos.d/jenkins.repo http://pkg.jenkins-ci.org/redhat-stable/jenkins.repo && \
     rpm --import https://jenkins-ci.org/redhat/jenkins-ci.org.key && \
-    microdnf --enablerepo=rhel-7-server-rpms --enablerepo=jenkins install java-1.8.0-openjdk-devel shadow-utils jenkins zip unzip --nodocs && \
+    microdnf --enablerepo=rhel-7-server-rpms --enablerepo=jenkins install java-1.8.0-openjdk-devel shadow-utils jenkins zip unzip rsync --nodocs && \
     echo microdnf remove libxslt gdbm python-libs python python-lxml python-javapackages  && \
     microdnf clean all && \
     rpm -qa
@@ -16,7 +16,7 @@ RUN set -x && \
     chmod 777 /usr/local/bin/oc && \
     rm -rf /tmp/oc
 
-COPY ./contrib/jenkins /usr/local/bin
+COPY ./contrib/jenkins/support/bin /usr/local/bin
 COPY ./contrib/openshift /opt/openshift
 
 RUN set -x && \
