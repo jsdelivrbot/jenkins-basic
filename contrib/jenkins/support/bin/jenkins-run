@@ -23,7 +23,9 @@ JENKINS_JAVA_CMD="/usr/bin/java"
 JENKINS_JAVA_OPTIONS='-XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap'
 
 JAVA_CMD="$JENKINS_JAVA_CMD $JENKINS_JAVA_OPTIONS -Djenkins.install.runSetupWizard=false -DJENKINS_HOME=$JENKINS_HOME -jar $JENKINS_WAR"
-PARAMS="--logfile=/var/log/jenkins/jenkins.log --webroot=/var/cache/jenkins/war--daemon"
+PARAMS="--webroot=/var/cache/jenkins/war--daemon"
+
+#--logfile=/var/log/jenkins/jenkins.log
 [ -n "$JENKINS_PORT" ] && PARAMS="$PARAMS --httpPort=$JENKINS_PORT"
 [ -n "$JENKINS_LISTEN_ADDRESS" ] && PARAMS="$PARAMS --httpListenAddress=$JENKINS_LISTEN_ADDRESS"
 [ -n "$JENKINS_HTTPS_PORT" ] && PARAMS="$PARAMS --httpsPort=$JENKINS_HTTPS_PORT"

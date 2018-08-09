@@ -9,7 +9,12 @@
   <authorizationStrategy class="hudson.security.GlobalMatrixAuthorizationStrategy">
     <permission>hudson.model.Hudson.Administer:anonymous</permission>
   </authorizationStrategy>
-  <securityRealm class="org.openshift.jenkins.plugins.openshiftlogin.OpenShiftOAuth2SecurityRealm" plugin="openshift-login@1.0.9"/>
+  <securityRealm class="org.openshift.jenkins.plugins.openshiftlogin.OpenShiftOAuth2SecurityRealm" plugin="openshift-login@1.0.9">
+    <defaultedServiceAccountDirectory>/run/secrets/kubernetes.io/serviceaccount</defaultedServiceAccountDirectory>
+    <defaultedServiceAccountName>jenkins-atomic</defaultedServiceAccountName>
+    <defaultedServerPrefix>https://openshift.default.svc</defaultedServerPrefix>
+    <namespace>csnr-devops-lab-tools</namespace>
+  </securityRealm>
   <disableRememberMe>true</disableRememberMe>
   <projectNamingStrategy class="jenkins.model.ProjectNamingStrategy$DefaultProjectNamingStrategy"/>
   <workspaceDir>${JENKINS_HOME}/workspace/${ITEM_FULL_NAME}</workspaceDir>
