@@ -18,15 +18,16 @@ RUN set -x && \
 
 COPY ./contrib/jenkins/support/bin /usr/local/bin
 #Default Configuration
-COPY ./contrib/jenkins/configuration /var/lib/jenkins
+COPY ./contrib/jenkins/configuration /opt/jenkins
 COPY ./contrib/openshift /opt/openshift
 
 RUN set -x && \
     curl -sLo /usr/local/bin/dumb-init https://github.com/Yelp/dumb-init/releases/download/v1.2.2/dumb-init_1.2.2_amd64 && \
-    chmod 777 /usr/local/bin/dumb-init
+    chmod 664 /usr/local/bin/dumb-init
 
 ENV JENKINS_VERSION=2 \
     HOME=/var/lib/jenkins \
+    JENKINS_REF_HOME=/opt/jenkins \
     JENKINS_HOME=/var/lib/jenkins \
     JENKINS_UC=https://updates.jenkins.io \
     OPENSHIFT_JENKINS_IMAGE_VERSION=3.11 \
@@ -35,8 +36,11 @@ ENV JENKINS_VERSION=2 \
 
 RUN set -x && \
     curl -sLo /usr/local/bin/jenkins-install-plugins https://raw.githubusercontent.com/openshift/jenkins/master/2/contrib/jenkins/install-plugins.sh && \
-    chmod 777 /usr/local/bin/jenkins-install-plugins && \
-    (export REF=/var/lib/jenkins/plugins; /usr/local/bin/jenkins-install-plugins /opt/openshift/plugins.txt)
+    chmod 664 /usr/local/bin/jenkins-install-plugins && \
+    (export REF=/opt/jenkins/plugins; /usr/local/bin/jenkins-install-plugins /opt/openshift/plugins.txt) && \
+    chgrp -R 0 $JENKINS_REF_HOME && \
+    chmod -R 644 $JENKINS_REF_HOME && \
+    chmod -R g+rX $JENKINS_REF_HOME && \
 
 RUN set -x && \
     java -version && \
