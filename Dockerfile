@@ -40,19 +40,20 @@ RUN set -x && \
     (export REF=/opt/jenkins/plugins; /usr/local/bin/jenkins-install-plugins /opt/openshift/plugins.txt) && \
     chgrp -R 0 $JENKINS_REF_HOME && \
     chmod -R 644 $JENKINS_REF_HOME && \
-    chmod -R g+rX $JENKINS_REF_HOME && \
+    chmod -R g+rX $JENKINS_REF_HOME
 
 RUN set -x && \
     java -version && \
+    mkdir -p $JENKINS_HOME && \
     chmod 664 /etc/passwd && \
     chmod -R 666 /etc/sysconfig/jenkins && \
     chgrp -R 0 /var/log/jenkins && \
     chmod -R 666 /var/log/jenkins && \
-    chmod -R 666 /var/lib/jenkins && \
+    chmod -R 666 $JENKINS_HOME && \
     chgrp -R 0 /usr/local/bin && \
     chmod -R g+rwx /usr/local/bin && \
-    chgrp -R 0 /var/lib/jenkins && \
-    chmod -R g+rwX /var/lib/jenkins && \
+    chgrp -R 0 $JENKINS_HOME && \
+    chmod -R g+rwX $JENKINS_HOME && \
     chgrp -R 0 /var/log && \
     chmod -R g+rwX /var/log && \
     chgrp -R 0 /var/cache/jenkins && \
