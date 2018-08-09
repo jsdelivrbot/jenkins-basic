@@ -4,7 +4,6 @@ RUN set -x && microdnf -h && \
     curl -so /etc/yum.repos.d/jenkins.repo http://pkg.jenkins-ci.org/redhat-stable/jenkins.repo && \
     rpm --import https://jenkins-ci.org/redhat/jenkins-ci.org.key && \
     microdnf --enablerepo=rhel-7-server-rpms --enablerepo=rhel-server-rhscl-7-rpms --enablerepo=jenkins install java-1.8.0-openjdk-devel shadow-utils jenkins zip unzip rsync rh-git29 --nodocs && \
-    ln -s /opt/rh/rh-git29/enable /etc/profile.d/rh-git29.sh && \
     echo microdnf remove libxslt gdbm python-libs python python-lxml python-javapackages  && \
     microdnf clean all && \
     rpm -qa
