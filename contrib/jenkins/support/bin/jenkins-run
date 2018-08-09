@@ -12,7 +12,7 @@ function generate_passwd_file() {
 generate_passwd_file
 
 #Copy all configuration files to JENKINS_HOME
-rsync -avz --no-o --no-g --no-perms --no-acls --no-xattrs --no-super $JENKINS_REF_HOME/ $JENKINS_HOME/
+rsync -avz --no-o --no-g --no-perms --no-acls --no-xattrs --no-super --omit-dir-times $JENKINS_REF_HOME/ $JENKINS_HOME/
 
 
 CONTAINER_MEMORY_IN_BYTES=$(cat /sys/fs/cgroup/memory/memory.limit_in_bytes)
