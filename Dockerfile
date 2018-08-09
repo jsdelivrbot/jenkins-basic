@@ -32,6 +32,10 @@ RUN set -x && \
     curl -sLo /usr/local/bin/dumb-init https://github.com/Yelp/dumb-init/releases/download/v1.2.2/dumb-init_1.2.2_amd64 && \
     chmod 555 /usr/local/bin/dumb-init
 
+RUN set -x && \
+    curl -sLo /usr/lib/jenkins/swarm-client.jar https://repo.jenkins-ci.org/releases/org/jenkins-ci/plugins/swarm-client/3.9/swarm-client-3.9.jar && \
+    chmod 644 /usr/lib/jenkins/swarm-client.jar
+
 ENV JENKINS_VERSION=2 \
     HOME=/var/lib/jenkins \
     JENKINS_REF_HOME=/opt/jenkins \
