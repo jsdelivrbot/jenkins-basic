@@ -17,6 +17,8 @@ RUN set -x && \
     rm -rf /tmp/oc
 
 COPY ./contrib/jenkins/support/bin /usr/local/bin
+#Default Configuration
+COPY ./contrib/jenkins/configuration /var/lib/jenkins
 COPY ./contrib/openshift /opt/openshift
 
 RUN set -x && \
