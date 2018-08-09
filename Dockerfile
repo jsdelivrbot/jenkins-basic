@@ -13,7 +13,7 @@ RUN set -x && \
     curl -sLo /tmp/oc/openshift-origin-client-tools-v3.9.0-191fece-linux-64bit.tar.gz https://github.com/openshift/origin/releases/download/v3.9.0/openshift-origin-client-tools-v3.9.0-191fece-linux-64bit.tar.gz && \
     tar -xzf /tmp/oc/openshift-origin-client-tools-v3.9.0-191fece-linux-64bit.tar.gz -C /tmp/oc  --strip-components=1 && \
     cp /tmp/oc/oc /usr/local/bin/ && \
-    chmod 777 /usr/local/bin/oc && \
+    chmod 555 /usr/local/bin/oc && \
     rm -rf /tmp/oc
 
 COPY ./contrib/jenkins/support/bin /usr/local/bin
@@ -23,7 +23,7 @@ COPY ./contrib/openshift /opt/openshift
 
 RUN set -x && \
     curl -sLo /usr/local/bin/dumb-init https://github.com/Yelp/dumb-init/releases/download/v1.2.2/dumb-init_1.2.2_amd64 && \
-    chmod 664 /usr/local/bin/dumb-init
+    chmod 555 /usr/local/bin/dumb-init
 
 ENV JENKINS_VERSION=2 \
     HOME=/var/lib/jenkins \
@@ -36,7 +36,7 @@ ENV JENKINS_VERSION=2 \
 
 RUN set -x && \
     curl -sLo /usr/local/bin/jenkins-install-plugins https://raw.githubusercontent.com/openshift/jenkins/master/2/contrib/jenkins/install-plugins.sh && \
-    chmod 664 /usr/local/bin/jenkins-install-plugins && \
+    chmod 555 /usr/local/bin/jenkins-install-plugins && \
     (export REF=/opt/jenkins/plugins; /usr/local/bin/jenkins-install-plugins /opt/openshift/plugins.txt) && \
     chgrp -R 0 $JENKINS_REF_HOME && \
     chmod -R 644 $JENKINS_REF_HOME && \
