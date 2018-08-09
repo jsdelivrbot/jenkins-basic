@@ -4,7 +4,6 @@ RUN set -x && microdnf -h && \
     curl -so /etc/yum.repos.d/jenkins.repo http://pkg.jenkins-ci.org/redhat-stable/jenkins.repo && \
     rpm --import https://jenkins-ci.org/redhat/jenkins-ci.org.key && \
     microdnf --enablerepo=rhel-7-server-rpms --enablerepo=rhel-server-rhscl-7-rpms --enablerepo=jenkins install java-1.8.0-openjdk-devel shadow-utils jenkins zip unzip rsync elfutils rh-git29 --nodocs && \
-    echo 'source scl_source enable rh-git29' > /etc/profile.d/rh-git29.sh && chmod 555 /etc/profile.d/rh-git29.sh && \
     echo microdnf remove libxslt gdbm python-libs python python-lxml python-javapackages  && \
     microdnf clean all && \
     rpm -qa
@@ -21,6 +20,13 @@ COPY ./contrib/jenkins/support/bin /usr/local/bin
 #Default Configuration
 COPY ./contrib/jenkins/configuration /opt/jenkins
 COPY ./contrib/openshift /opt/openshift
+
+# When bash is started non-interactively, to run a shell script, for example it
+# looks for this variable and source the content of this file. This will enable
+# the SCL for all scripts without need to do 'scl enable'.
+ENV BASH_ENV=/usr/local/bin/scl_enable \
+    ENV=/usr/local/bin/scl_enable \
+    PROMPT_COMMAND=". /usr/local/bin/scl_enable"
 
 RUN set -x && \
     curl -sLo /usr/local/bin/dumb-init https://github.com/Yelp/dumb-init/releases/download/v1.2.2/dumb-init_1.2.2_amd64 && \
@@ -52,7 +58,7 @@ RUN set -x && \
     chmod -R 666 /var/log/jenkins && \
     chmod -R 666 $JENKINS_HOME && \
     chgrp -R 0 /usr/local/bin && \
-    chmod -R g+rwx /usr/local/bin && \
+    chmod -R g+rx /usr/local/bin && \
     chgrp -R 0 $JENKINS_HOME && \
     chmod -R g+rwX $JENKINS_HOME && \
     chgrp -R 0 /var/log && \
