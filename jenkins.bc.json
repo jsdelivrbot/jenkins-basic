@@ -1,0 +1,122 @@
+{
+    "kind": "Template",
+    "apiVersion": "v1",
+    "metadata": {
+        "name": "jenkins",
+        "creationTimestamp": null
+    },
+    "parameters":[
+        {
+            "name": "NAME",
+            "displayName": "Name",
+            "description": "A name used for all objects",
+            "required": true,
+            "value": "jenkins-atomic"
+        },{
+            "name": "VERSION",
+            "displayName": "version",
+            "description": "A version used for the image tags",
+            "required": true,
+            "value": "v1.0.0"
+        },{
+            "name": "RHEL_ATOMIC_VERSION",
+            "displayName": "version",
+            "description": "A version used for the image tags",
+            "value": "7.5-408",
+            "required": true
+        }
+    ],
+    "objects": [
+        {
+            "kind": "ImageStream",
+            "apiVersion": "v1",
+            "metadata": {
+                "name": "rhel-atomic",
+                "creationTimestamp": null
+            },
+            "spec": {
+                "lookupPolicy": {
+                    "local": false
+                },
+                "tags": [
+                    {
+                        "name": "${RHEL_ATOMIC_VERSION}",
+                        "annotations": {
+                            "openshift.io/imported-from": "registry.access.redhat.com/rhel-atomic:${RHEL_ATOMIC_VERSION}"
+                        },
+                        "from": {
+                            "kind": "DockerImage",
+                            "name": "registry.access.redhat.com/rhel-atomic:${RHEL_ATOMIC_VERSION}"
+                        },
+                        "importPolicy": {}
+                    }
+                ]
+            }
+        },
+        {
+            "kind": "ImageStream",
+            "apiVersion": "v1",
+            "metadata": {
+                "name": "${NAME}",
+                "creationTimestamp": null
+            },
+            "spec": {
+                "lookupPolicy": {
+                    "local": false
+                }
+            }
+        },
+        {
+            "kind": "BuildConfig",
+            "apiVersion": "v1",
+            "metadata": {
+                "name": "${NAME}",
+                "creationTimestamp": null
+            },
+            "spec": {
+                "triggers": [
+                    {
+                        "type": "ConfigChange"
+                    },
+                    {
+                        "type": "ImageChange",
+                        "imageChange": {}
+                    }
+                ],
+                "source": {
+                    "type": "Git",
+                    "git": {
+                        "uri": "https://github.com/cvarjao/jenkins-basic.git"
+                    }
+                },
+                "strategy": {
+                    "type": "Docker",
+                    "dockerStrategy": {
+                        "from": {
+                            "kind": "ImageStreamTag",
+                            "name": "rhel-atomic:${RHEL_ATOMIC_VERSION}"
+                        }
+                    }
+                },
+                "output": {
+                    "to": {
+                        "kind": "ImageStreamTag",
+                        "name": "${NAME}:${VERSION}"
+                    }
+                },
+                "resources": {
+                    "limits": {
+                        "cpu": "1",
+                        "memory": "1Gi"
+                    },
+                    "requests": {
+                        "cpu": "1",
+                        "memory": "1Gi"
+                    }
+                },
+                "postCommit": {},
+                "runPolicy": "SerialLatestOnly"
+            }
+        }
+    ]
+}

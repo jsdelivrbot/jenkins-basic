@@ -10,6 +10,7 @@ durable-task:1.25
 github-api:1.92
 mailer:1.21
 monitoring:1.73.1
+simple-theme-plugin:0.4
 structs:1.14
 variant:1.1
 workflow-step-api:2.16
@@ -28,7 +29,7 @@ matrix-auth:2.3
 matrix-project:1.13
 openshift-login:1.0.9
 git-client:2.7.3
-kubernetes:1.12.2
+kubernetes:1.12.3
 git:3.9.1
 github:1.29.2
 github-branch-source:2.3.6
