@@ -76,5 +76,7 @@ LABEL io.k8s.description="Jenkins is a continuous integration server" \
       io.openshift.tags="jenkins,jenkins2,ci" \
       io.openshift.expose-services="8080:http"
 
+WORKDIR $HOME
+
 USER 1001
 

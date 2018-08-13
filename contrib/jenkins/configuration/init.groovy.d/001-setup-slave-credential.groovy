@@ -29,6 +29,6 @@ Thread.start {
     
     Jenkins.instance.getAuthorizationStrategy().add(hudson.slaves.SlaveComputer.CREATE, username)
     Jenkins.instance.getAuthorizationStrategy().add(hudson.slaves.SlaveComputer.CONNECT, username)
-    Jenkins.instance.getAuthorizationStrategy().add(Item.READ, username)
+    Jenkins.instance.getAuthorizationStrategy().add(hudson.model.Jenkins.READ, username)
     u.save();
 }
