@@ -3,7 +3,7 @@ import org.jenkinsci.plugins.scriptsecurity.scripts.*
 import org.jenkinsci.plugins.scriptsecurity.scripts.languages.*
 
 
-Thread.start {
+//Thread.start {
     java.time.Instant startTime = java.time.Instant.now()
     def job = null
 
@@ -28,4 +28,4 @@ Thread.start {
             }
         }
     }
-}
+//}
