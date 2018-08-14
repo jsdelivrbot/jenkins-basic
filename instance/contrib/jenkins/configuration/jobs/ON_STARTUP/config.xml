@@ -22,8 +22,7 @@
         <hudson.plugins.groovy.SystemGroovy plugin="groovy@2.0">
             <source class="hudson.plugins.groovy.StringSystemScriptSource">
                 <script plugin="script-security@1.41">
-                    <script>println &apos;Hello World&apos;;
-                        evaluate([:])</script>
+                    <script>println &apos;Hello World&apos;;</script>
                     <sandbox>false</sandbox>
                 </script>
             </source>
