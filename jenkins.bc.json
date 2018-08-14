@@ -57,6 +57,19 @@
             "kind": "ImageStream",
             "apiVersion": "v1",
             "metadata": {
+                "name": "${NAME}-base",
+                "creationTimestamp": null
+            },
+            "spec": {
+                "lookupPolicy": {
+                    "local": false
+                }
+            }
+        },
+        {
+            "kind": "ImageStream",
+            "apiVersion": "v1",
+            "metadata": {
                 "name": "${NAME}",
                 "creationTimestamp": null
             },
@@ -64,6 +77,59 @@
                 "lookupPolicy": {
                     "local": false
                 }
+            }
+        },
+        {
+            "kind": "BuildConfig",
+            "apiVersion": "v1",
+            "metadata": {
+                "name": "${NAME}-base",
+                "creationTimestamp": null
+            },
+            "spec": {
+                "triggers": [
+                    {
+                        "type": "ConfigChange"
+                    },
+                    {
+                        "type": "ImageChange",
+                        "imageChange": {}
+                    }
+                ],
+                "source": {
+                    "type": "Git",
+                    "git": {
+                        "uri": "https://github.com/cvarjao/jenkins-basic.git"
+                    },
+                    "contextDir": "base"
+                },
+                "strategy": {
+                    "type": "Docker",
+                    "dockerStrategy": {
+                        "from": {
+                            "kind": "ImageStreamTag",
+                            "name": "rhel-atomic:${RHEL_ATOMIC_VERSION}"
+                        }
+                    }
+                },
+                "output": {
+                    "to": {
+                        "kind": "ImageStreamTag",
+                        "name": "${NAME}-base:${VERSION}"
+                    }
+                },
+                "resources": {
+                    "limits": {
+                        "cpu": "1",
+                        "memory": "1Gi"
+                    },
+                    "requests": {
+                        "cpu": "1",
+                        "memory": "1Gi"
+                    }
+                },
+                "postCommit": {},
+                "runPolicy": "SerialLatestOnly"
             }
         },
         {
@@ -87,14 +153,15 @@
                     "type": "Git",
                     "git": {
                         "uri": "https://github.com/cvarjao/jenkins-basic.git"
-                    }
+                    },
+                    "contextDir": "instance"
                 },
                 "strategy": {
                     "type": "Docker",
                     "dockerStrategy": {
                         "from": {
                             "kind": "ImageStreamTag",
-                            "name": "rhel-atomic:${RHEL_ATOMIC_VERSION}"
+                            "name": "${NAME}-base:${VERSION}"
                         }
                     }
                 },
