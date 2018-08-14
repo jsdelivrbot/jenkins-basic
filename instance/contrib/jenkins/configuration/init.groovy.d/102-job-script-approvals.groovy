@@ -13,7 +13,7 @@ Thread.start {
         if (java.time.Duration.between(startTime, java.time.Instant.now()).getSeconds() > 60) throw new RuntimeException('Timeout!')
         println 'Waiting for ON_GH_EVENT to load'
         Thread.sleep(1000);
-        job = Jenkins.instance.getItem('ON_GH_EVENT')
+        job = Jenkins.instance.getItemByFullName('ON_GH_EVENT')
         println "ON_GH_EVENT:${job}"
     }
 
