@@ -51,7 +51,7 @@ RUN set -x && \
     (export REF=/opt/jenkins/plugins; /usr/local/bin/jenkins-install-plugins /opt/openshift/plugins.txt) && \
     chgrp -R 0 $JENKINS_REF_HOME && \
     chmod -R 644 $JENKINS_REF_HOME && \
-    chmod -R g+rX $JENKINS_REF_HOME
+    chmod -R g+rwX $JENKINS_REF_HOME
 
 RUN set -x && \
     java -version && \
