@@ -2,7 +2,7 @@ import jenkins.model.Jenkins
 import org.jenkinsci.plugins.scriptsecurity.scripts.*
 import org.jenkinsci.plugins.scriptsecurity.scripts.languages.*
 
-
+//it **CANNOT** run in a separate thread :(
 //Thread.start {
     java.time.Instant startTime = java.time.Instant.now()
     def job = null
@@ -11,10 +11,10 @@ import org.jenkinsci.plugins.scriptsecurity.scripts.languages.*
     while (job == null) {
         
         if (java.time.Duration.between(startTime, java.time.Instant.now()).getSeconds() > 60) throw new RuntimeException('Timeout!')
-        println 'Waiting for ON_GH_EVENT to load'
+        //println 'Waiting for ON_GH_EVENT to load'
         Thread.sleep(1000);
         job = Jenkins.instance.getItemByFullName('ON_GH_EVENT')
-        println "ON_GH_EVENT:${job}"
+        //println "ON_GH_EVENT:${job}"
     }
 
     final ScriptApproval sa = ScriptApproval.get();
