@@ -22,6 +22,7 @@ token-macro:2.5
 workflow-api:2.29
 workflow-scm-step:2.6
 cloudbees-folder:6.5.1
+groovy:2.0
 jsch:0.1.54.2
 junit:1.24
 kubernetes-credentials:0.3.1
