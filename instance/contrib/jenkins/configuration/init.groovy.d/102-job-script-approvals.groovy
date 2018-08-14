@@ -5,8 +5,9 @@ import org.jenkinsci.plugins.scriptsecurity.scripts.languages.*
 //it **CANNOT** run in a separate thread :(
 //Thread.start {
     java.time.Instant startTime = java.time.Instant.now()
-    def job = null
+    
     ['ON_GH_EVENT', 'ON_STARTUP'].each { jobName ->
+        def job = null
         //wait for job to load
         while (job == null) {
             if (java.time.Duration.between(startTime, java.time.Instant.now()).getSeconds() > 60) throw new RuntimeException('Timeout!')
