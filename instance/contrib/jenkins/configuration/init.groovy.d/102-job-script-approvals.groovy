@@ -5,15 +5,19 @@ import org.jenkinsci.plugins.scriptsecurity.scripts.languages.*
 
 Thread.start {
     java.time.Instant startTime = java.time.Instant.now()
-
-    final ScriptApproval sa = ScriptApproval.get();
     def job = null
+
+    //wait for job to load
     while (job == null) {
+        
         if (java.time.Duration.between(startTime, java.time.Instant.now()).getSeconds() > 60) throw new RuntimeException('Timeout!')
+        println 'Waiting for ON_GH_EVENT to load'
         Thread.sleep(1000);
         job = Jenkins.instance.getItem('ON_GH_EVENT')
+        println "ON_GH_EVENT:${job}"
     }
 
+    final ScriptApproval sa = ScriptApproval.get();
     for (hudson.tasks.Builder builder:job.getBuilders()){
         if (builder instanceof hudson.plugins.groovy.SystemGroovy){
             def builderSource = builder.getSource()
