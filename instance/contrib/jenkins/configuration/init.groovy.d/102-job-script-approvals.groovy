@@ -22,7 +22,9 @@ import org.jenkinsci.plugins.scriptsecurity.scripts.languages.*
                 if (builderSource instanceof hudson.plugins.groovy.StringSystemScriptSource){
                     String scriptSource = builderSource.getScript().getScript()
                     ScriptApproval.PendingScript s = new ScriptApproval.PendingScript(scriptSource, GroovyLanguage.get(), ApprovalContext.create())
-                    sa.approveScript(s.getHash())
+                    String scriptHash = s.getHash()
+                    println "Approving Groovy Script for ${job.getDisplayName()} with hash ${scriptHash}"
+                    sa.approveScript(scriptHash)
                 }
             }
         }
