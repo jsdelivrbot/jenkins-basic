@@ -20,11 +20,6 @@
         </script>
       </source>
     </hudson.plugins.groovy.SystemGroovy>
-    <hudson.plugins.groovy.SystemGroovy plugin="groovy@2.0">
-      <source class="hudson.plugins.groovy.FileSystemScriptSource">
-        <scriptFile>on-gh-event.groovy</scriptFile>
-      </source>
-    </hudson.plugins.groovy.SystemGroovy>
   </builders>
   <publishers/>
   <buildWrappers/>
