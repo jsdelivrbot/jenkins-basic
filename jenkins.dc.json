@@ -18,6 +18,12 @@
             "description": "A version used for the image tags",
             "value": "v1.0.0",
             "required": true
+        },{
+            "name": "GITHUB_USERNAME",
+            "displayName": "GITHUB_USERNAME",
+            "description": "GITHUB_USERNAME",
+            "value": "cvarjao",
+            "required": true
         }
     ],
     "objects": [
@@ -30,6 +36,18 @@
             "stringData": {
                 "metadata.name": "${NAME}-slave-user",
                 "username": "jenkins-slave"
+            },
+            "type": "kubernetes.io/basic-auth"
+        },
+        {
+            "kind": "Secret",
+            "apiVersion": "v1",
+            "metadata": {
+                "name": "${NAME}-github"
+            },
+            "stringData": {
+                "metadata.name": "${NAME}-github",
+                "username": "${GITHUB_USERNAME}"
             },
             "type": "kubernetes.io/basic-auth"
         },
@@ -164,6 +182,13 @@
                                     "secretName": "${NAME}-slave-user",
                                     "defaultMode": 420
                                 }
+                            },
+                            {
+                                "name": "github",
+                                "secret": {
+                                    "secretName": "${NAME}-github",
+                                    "defaultMode": 420
+                                }
                             }
                         ],
                         "containers": [
@@ -198,6 +223,11 @@
                                         "name": "jenkins-slave-user",
                                         "readOnly": true,
                                         "mountPath": "/run/secrets/jenkins-slave-user"
+                                    },
+                                    {
+                                        "name": "github",
+                                        "readOnly": true,
+                                        "mountPath": "/run/secrets/github"
                                     }
                                 ],
                                 "resources": {
@@ -296,6 +326,13 @@
                                     "secretName": "${NAME}-slave-user",
                                     "defaultMode": 420
                                 }
+                            },
+                            {
+                                "name": "github",
+                                "secret": {
+                                    "secretName": "${NAME}-github",
+                                    "defaultMode": 420
+                                }
                             }
                         ],
                         "containers": [
@@ -336,6 +373,11 @@
                                         "name": "jenkins-slave-user",
                                         "readOnly": true,
                                         "mountPath": "/run/secrets/jenkins-slave-user"
+                                    },
+                                    {
+                                        "name": "github",
+                                        "readOnly": true,
+                                        "mountPath": "/run/secrets/github"
                                     }
                                 ],
                                 "resources": {
@@ -362,32 +404,6 @@
                         "serviceAccount": "${NAME}"
                     }
                 }
-            }
-        },
-        {
-            "kind": "Service",
-            "apiVersion": "v1",
-            "metadata": {
-                "name": "${NAME}-jnlp",
-                "creationTimestamp": null
-            },
-            "spec": {
-                "ports": [
-                    {
-                        "name": "agent",
-                        "protocol": "TCP",
-                        "port": 50000,
-                        "targetPort": 50000
-                    }
-                ],
-                "selector": {
-                    "deploymentconfig": "${NAME}"
-                },
-                "type": "ClusterIP",
-                "sessionAffinity": "None"
-            },
-            "status": {
-                "loadBalancer": {}
             }
         },
         {
