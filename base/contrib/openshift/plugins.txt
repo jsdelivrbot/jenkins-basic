@@ -9,6 +9,7 @@ display-url-api:2.2.0
 durable-task:1.25
 github-api:1.92
 groovy-events-listener-plugin:1.014
+jquery-detached:1.2.1
 mailer:1.21
 monitoring:1.73.1
 simple-theme-plugin:0.4
@@ -16,6 +17,7 @@ startup-trigger-plugin:2.9.3
 structs:1.14
 variant:1.1
 workflow-step-api:2.16
+ace-editor:1.1
 credentials:2.1.18
 generic-webhook-trigger:1.41
 plain-credentials:1.4
@@ -24,6 +26,7 @@ ssh-credentials:1.14
 token-macro:2.5
 workflow-api:2.29
 workflow-scm-step:2.6
+workflow-support:2.20
 cloudbees-folder:6.5.1
 groovy:2.0
 jsch:0.1.54.2
@@ -32,8 +35,12 @@ kubernetes-credentials:0.3.1
 matrix-auth:2.3
 matrix-project:1.13
 openshift-login:1.0.9
+workflow-cps:2.54
+workflow-job:2.24
+branch-api:2.0.20
 git-client:2.7.3
 kubernetes:1.12.3
+workflow-multibranch:2.20
 git:3.9.1
 github:1.29.2
 github-branch-source:2.3.6
