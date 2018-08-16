@@ -6,6 +6,8 @@ import org.kohsuke.github.*
 String jenkinsUrl = JenkinsLocationConfiguration.get().getUrl()
 String genericWebHookTriggerToken = Jenkins.instance.getItem('ON_GH_EVENT').getTrigger(org.jenkinsci.plugins.gwt.GenericTrigger.class).getToken()
 
+
+
 Jenkins.instance.getAllItems().each { job ->
   if (job instanceof jenkins.branch.MultiBranchProject){
     for (def branchSource:job.getSources()){
@@ -20,7 +22,7 @@ Jenkins.instance.getAllItems().each { job ->
             org.kohsuke.github.GHRepository ghRepository = github.getRepository(fullName);
             Map hooks =[
                 'github-webhook':['url':"${jenkinsUrl}github-webhook/", 'events':[org.kohsuke.github.GHEvent.PULL_REQUEST, org.kohsuke.github.GHEvent.PUSH]],
-                'generic-webhook-trigger.0':['url':"${jenkinsUrl}generic-webhook-trigger/invoke?i=0", 'qs':"token=${genericWebHookTriggerToken}", 'events':[org.kohsuke.github.GHEvent.PULL_REQUEST]]
+                'generic-webhook-trigger.0':['url':"${jenkinsUrl}generic-webhook-trigger/invoke?token=${genericWebHookTriggerToken}", 'events':[org.kohsuke.github.GHEvent.PULL_REQUEST]]
             ]
             for (def hook:ghRepository.getHooks()){
                 //println hook
@@ -49,6 +51,5 @@ Jenkins.instance.getAllItems().each { job ->
         }
       }
     }
-    
   }
 }
