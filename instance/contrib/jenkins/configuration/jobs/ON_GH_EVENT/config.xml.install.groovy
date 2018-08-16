@@ -15,7 +15,7 @@ static Map exec(List args, Appendable stdout=null, Appendable stderr=null, Closu
     if (stdout == null ){
         stdout = new StringBuffer()
     }
-    
+
     proc.waitForProcessOutput(stdout, stderr)
     int exitValue= proc.exitValue()
 
@@ -40,17 +40,18 @@ static Map exec(List args, Appendable stdout=null, Appendable stderr=null, Closu
 
         def installFile = args[0]
         def configXmlFile = installFile.substring(0, installFile.length() - '.install.groovy'.length())
+        def configXmlTemplateFile = configXmlFile + '.template'
 
-        String outputFile = configXmlFile
-        if (outputFile.endsWith('.template')){
-            outputFile=outputFile.substring(0, configXmlFile.length() - 9)
-        }
+        println "configXmlFile:${configXmlFile}"
+        println "configXmlTemplateFile:${configXmlTemplateFile}"
 
-        new File( outputFile ).withWriter { w ->
-            new File("${configXmlFile}").eachLine { line ->
+        new File( configXmlFile ).withWriter { w ->
+            new File(configXmlTemplateFile).eachLine { line ->
                 w << line.replaceAll(Pattern.quote('#{TOKEN}'), secretToken ) + System.getProperty("line.separator")
             }
         }
+
+        return null
     }
 
     static void main(String[] args) {           
