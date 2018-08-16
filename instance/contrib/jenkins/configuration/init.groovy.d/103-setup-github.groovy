@@ -7,6 +7,8 @@ import org.jenkinsci.plugins.plaincredentials.impl.*;
 
 import hudson.util.Secret;
 import com.cloudbees.jenkins.GitHubWebHook;
+import com.cloudbees.jenkins.*
+import org.kohsuke.github.*
 
 
 String githubUsername = new File('/var/run/secrets/github/username').getText('UTF-8').trim()
@@ -40,9 +42,3 @@ ghServerConfig.setManageHooks(true);
 ghServerConfig.setClientCacheSize(21)
 ghCofigs.clear();
 ghCofigs.add(ghServerConfig);
-
-
-def registeredGHWebHooks = GitHubWebHook.get().reRegisterAllHooks();
-println "Called registerHooks() for ${registeredGHWebHooks.size()} items"
-
-//GitHubRepositoryName.create(url).resolveOne()
