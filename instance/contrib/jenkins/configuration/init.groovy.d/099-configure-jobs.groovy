@@ -1,3 +1,6 @@
+import jenkins.*
+import jenkins.model.*
+
 class ConfigureJobs009 extends Script {
 
 static Map exec(List args, Appendable stdout=null, Appendable stderr=null, Closure stdin=null){
