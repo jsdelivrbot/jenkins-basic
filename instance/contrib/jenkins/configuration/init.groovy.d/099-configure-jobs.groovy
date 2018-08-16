@@ -45,6 +45,7 @@ def run() {
     def job = Jenkins.instance.getItem('ON_GH_EVENT')
     job.getTrigger(org.jenkinsci.plugins.gwt.GenericTrigger.class).setToken(secretToken)
     job.save()
+    job.doReload()
 }
     static void main(String[] args) {           
         org.codehaus.groovy.runtime.InvokerHelper.runScript(ConfigureJobs009, args)     
