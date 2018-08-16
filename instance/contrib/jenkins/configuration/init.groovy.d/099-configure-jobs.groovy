@@ -1,4 +1,4 @@
-def _exec(List args, Appendable stdout=null, Appendable stderr=null, Closure stdin=null){
+static Map  _exec(List args, Appendable stdout=null, Appendable stderr=null, Closure stdin=null){
     ProcessBuilder builder = new ProcessBuilder(args)
     def proc = builder.start()
 
