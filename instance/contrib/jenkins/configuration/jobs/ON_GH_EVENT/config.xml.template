@@ -45,6 +45,7 @@
       <printPostContent>false</printPostContent>
       <printContributedVariables>false</printContributedVariables>
       <causeString>Generic Cause</causeString>
+      <token>#{TOKEN}</token>
     </org.jenkinsci.plugins.gwt.GenericTrigger>
   </triggers>
   <concurrentBuild>true</concurrentBuild>
