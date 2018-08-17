@@ -34,7 +34,7 @@ Jenkins.instance.getAllItems().each { job ->
             }
             //Create Hooks
             hooks.each{ String name, Map newHook ->
-                if (newHook._hook==null){
+                if (newHook._hook == null){
                     Map hookCfg = ['url':newHook.url]
                     if (newHook.qs){
                         if (hookCfg.url.contains('?')){

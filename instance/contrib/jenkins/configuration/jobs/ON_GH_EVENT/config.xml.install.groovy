@@ -35,7 +35,7 @@ static Map exec(List args, Appendable stdout=null, Appendable stderr=null, Closu
             exec(['sh', '-c', "oc patch \"secret/\$(cat /var/run/secrets/github/metadata.name)\" -p '{\"stringData\": {\"generic-hook.token\": \"${secretToken}\"}}'" as String])
         }else{
             println "Using existing token"
-            secretToken = ocGetSecretToken.out.toString()
+            secretToken = ocGetSecretToken.out.toString().trim()
         }
 
         def installFile = args[0]
