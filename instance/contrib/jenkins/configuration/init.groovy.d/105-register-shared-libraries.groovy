@@ -25,7 +25,7 @@ List globalLibraries=[
 ]
 
 List libraries=[]
-for (Map globalLibrary: jenkinsConfig.globalLibraries) {
+for (Map globalLibrary: globalLibraries) {
   def libScm = new jenkins.plugins.git.GitSCMSource(globalLibrary.scm.url);
   libScm.setCredentialsId('github-account');
   libScm.setTraits([new jenkins.plugins.git.traits.BranchDiscoveryTrait(), new jenkins.plugins.git.traits.TagDiscoveryTrait()]);
