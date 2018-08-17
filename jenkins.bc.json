@@ -129,7 +129,9 @@
                     }
                 },
                 "postCommit": {},
-                "runPolicy": "SerialLatestOnly"
+                "runPolicy": "SerialLatestOnly",
+                "successfulBuildsHistoryLimit": 2,
+                "failedBuildsHistoryLimit": 2
             }
         },
         {
@@ -182,7 +184,9 @@
                     }
                 },
                 "postCommit": {},
-                "runPolicy": "SerialLatestOnly"
+                "runPolicy": "SerialLatestOnly",
+                "successfulBuildsHistoryLimit": 2,
+                "failedBuildsHistoryLimit": 2
             }
         }
     ]

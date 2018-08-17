@@ -45,7 +45,8 @@ Jenkins.instance.getAllItems().each { job ->
                         hookCfg.url=hookCfg.url+newHook.qs
                     }
                     println "Registering webhook: ${[new URL(hookCfg.url), newHook.events]}"
-                    ghRepository.createWebHook(new URL(hookCfg.url), newHook.events)
+                    ghRepository.createHook("web",["url":new URL(hookCfg.url).toExternalForm()], newHook.events,true)
+                    //ghRepository.createWebHook(new URL(hookCfg.url), newHook.events)
                 }
             }
         }

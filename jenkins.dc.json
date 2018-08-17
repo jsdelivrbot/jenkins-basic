@@ -24,6 +24,18 @@
             "description": "GITHUB_USERNAME",
             "value": "cvarjao",
             "required": true
+        },{
+            "name": "ROUTE_HOST",
+            "displayName": "ROUTE_HOST",
+            "description": "ROUTE_HOST",
+            "value": "jenkins-atomic-csnr-devops-lab-tools.pathfinder.gov.bc.ca",
+            "required": true
+        },{
+            "name": "ROUTE_PATH",
+            "displayName": "ROUTE_PATH",
+            "description": "ROUTE_PATH",
+            "value": "/",
+            "required": true
         }
     ],
     "objects": [
@@ -196,6 +208,7 @@
                                 "name": "jenkins",
                                 "image": " ",
                                 "command":[
+                                    "/usr/local/bin/container-entrypoint",
                                     "/usr/local/bin/jenkins-run"
                                 ],
                                 "ports": [
@@ -212,6 +225,9 @@
                                     {
                                         "name": "JAVA_OPTS",
                                         "value": "-XX:+PrintFlagsFinal -XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap -Djenkins.install.runSetupWizard=false"
+                                    },{
+                                        "name": "JENKINS_URL",
+                                        "value": "https://${ROUTE_HOST}${ROUTE_PATH}"
                                     }
                                 ],
                                 "volumeMounts": [
@@ -443,7 +459,8 @@
                 "creationTimestamp": null
             },
             "spec": {
-                "host": "",
+                "host": "${ROUTE_HOST}",
+                "path": "${ROUTE_PATH}",
                 "to": {
                     "kind": "Service",
                     "name": "${NAME}",
