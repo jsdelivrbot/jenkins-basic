@@ -224,7 +224,7 @@
                                 "env": [
                                     {
                                         "name": "JAVA_OPTS",
-                                        "value": "-XX:+PrintFlagsFinal -XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap -Djenkins.install.runSetupWizard=false"
+                                        "value": "-XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap"
                                     },{
                                         "name": "JENKINS_URL",
                                         "value": "https://${ROUTE_HOST}${ROUTE_PATH}"
@@ -358,7 +358,7 @@
                                 "command":[
                                     "bash",
                                     "-c",
-                                    "cd $HOME && exec java -jar /usr/lib/jenkins/swarm-client.jar -name \"$(cat /etc/hostname)\" -deleteExistingClients -fsroot \"$JENKINS_HOME/$(cat /etc/hostname)\" -master http://jenkins-atomic:8080 -disableSslVerification -username  \"$(cat /var/run/secrets/jenkins-slave-user/username)\" -passwordFile /var/run/secrets/jenkins-slave-user/password -description \"$(cat /etc/hostname)\" -executors 2 -labels 'Linux rhel rhel7 build' -mode 'normal' -retry 3 -tunnel jenkins-atomic:50000 -disableClientsUniqueId"
+                                    "cd $HOME && exec java -XX:+PrintFlagsFinal -XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap -Djenkins.install.runSetupWizard=false -jar /usr/lib/jenkins/swarm-client.jar -name \"$(cat /etc/hostname)\" -deleteExistingClients -fsroot \"$JENKINS_HOME/$(cat /etc/hostname)\" -master http://jenkins-atomic:8080 -disableSslVerification -username  \"$(cat /var/run/secrets/jenkins-slave-user/username)\" -passwordFile /var/run/secrets/jenkins-slave-user/password -description \"$(cat /etc/hostname)\" -executors 2 -labels 'Linux rhel rhel7 build test deploy light' -mode 'normal' -retry 10 -tunnel jenkins-atomic:50000 -disableClientsUniqueId"
                                 ],
                                 "ports": [
                                     {
@@ -377,7 +377,7 @@
                                     },
                                     {
                                         "name": "JAVA_OPTS",
-                                        "value": "-XX:+PrintFlagsFinal -XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap -Djenkins.install.runSetupWizard=false"
+                                        "value": "-XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap"
                                     }
                                 ],
                                 "volumeMounts": [
@@ -399,11 +399,11 @@
                                 "resources": {
                                     "limits": {
                                         "cpu": "1",
-                                        "memory": "1Gi"
+                                        "memory": "4Gi"
                                     },
                                     "requests": {
                                         "cpu": "1",
-                                        "memory": "1Gi"
+                                        "memory": "4Gi"
                                     }
                                 },
                                 "terminationMessagePath": "/dev/termination-log",
