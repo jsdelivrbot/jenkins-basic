@@ -223,7 +223,7 @@
                                 ],
                                 "env": [
                                     {
-                                        "name": "JAVA_OPTS",
+                                        "name": "JAVA_TOOL_OPTIONS",
                                         "value": "-XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap"
                                     },{
                                         "name": "JENKINS_URL",
@@ -248,12 +248,12 @@
                                 ],
                                 "resources": {
                                     "limits": {
-                                        "cpu": "1",
-                                        "memory": "1Gi"
+                                        "cpu": "2",
+                                        "memory": "4Gi"
                                     },
                                     "requests": {
                                         "cpu": "1",
-                                        "memory": "1Gi"
+                                        "memory": "4Gi"
                                     }
                                 },
                                 "terminationMessagePath": "/dev/termination-log",
@@ -376,7 +376,7 @@
                                         "value": "${NAME}"
                                     },
                                     {
-                                        "name": "JAVA_OPTS",
+                                        "name": "JAVA_TOOL_OPTIONS",
                                         "value": "-XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap"
                                     }
                                 ],
@@ -398,7 +398,7 @@
                                 ],
                                 "resources": {
                                     "limits": {
-                                        "cpu": "1",
+                                        "cpu": "2",
                                         "memory": "4Gi"
                                     },
                                     "requests": {
