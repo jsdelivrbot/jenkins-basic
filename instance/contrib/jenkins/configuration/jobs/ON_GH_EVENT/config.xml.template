@@ -53,14 +53,7 @@
     <hudson.plugins.groovy.SystemGroovy plugin="groovy@2.0">
       <source class="hudson.plugins.groovy.StringSystemScriptSource">
         <script plugin="script-security@1.44">
-          <script>String ghPayload = build.buildVariableResolver.resolve(&quot;payload&quot;)
-String ghEventType = build.buildVariableResolver.resolve(&quot;x_github_event&quot;)
-
-println &quot;ghEventType:&quot;
-println &quot;${ghEventType}&quot;
-
-println &quot;ghPayload:&quot;
-println &quot;${ghPayload}&quot;</script>
+          <script>evaluate(new File(System.getenv()[&apos;JENKINS_HOME&apos;], &apos;scripts.groovy.d/on-gh-event.groovy&apos;))</script>
           <sandbox>false</sandbox>
         </script>
       </source>
