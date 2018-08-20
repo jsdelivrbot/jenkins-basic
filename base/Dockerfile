@@ -1,18 +1,37 @@
 FROM registry.access.redhat.com/rhel7/rhel-atomic
 
+
+# https://blog.csanchez.org/2017/05/31/running-a-jvm-in-a-container-without-getting-killed/
+
 RUN set -x && microdnf -h && \
     curl -so /etc/yum.repos.d/jenkins.repo http://pkg.jenkins-ci.org/redhat-stable/jenkins.repo && \
     rpm --import https://jenkins-ci.org/redhat/jenkins-ci.org.key && \
-    microdnf --enablerepo=rhel-7-server-rpms --enablerepo=rhel-server-rhscl-7-rpms --enablerepo=jenkins install which java-1.8.0-openjdk-devel shadow-utils jenkins zip unzip rsync elfutils rh-git29 --nodocs && \
+    microdnf --enablerepo=rhel-7-server-rpms --enablerepo=rhel-server-rhscl-7-rpms --enablerepo=jenkins install which gpg java-1.8.0-openjdk-devel shadow-utils jenkins zip unzip rsync elfutils rh-git29 --nodocs && \
     microdnf clean all && \
+    echo "unset BASH_ENV PROMPT_COMMAND ENV" > /usr/local/bin/scl_enable && \
+    echo "source scl_source enable rh-git29" >> /usr/local/bin/scl_enable && \
+    chgrp -R 0 /usr/local/bin && \
+    chmod -R g+rx /usr/local/bin && \
     rpm -qa
 
+# When bash is started non-interactively, to run a shell script, for example it
+# looks for this variable and source the content of this file. This will enable
+# the SCL for all scripts without need to do 'scl enable'.
+ENV BASH_ENV=/usr/local/bin/scl_enable \
+    ENV=/usr/local/bin/scl_enable \
+    PROMPT_COMMAND=". /usr/local/bin/scl_enable" \
+    JAVA_TOOL_OPTIONS="-XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap -XX:MaxRAMFraction=4"
+
+
+ARG OC_VERSION=v3.9.0
+ARG OC_QUALIFIER=191fece-linux-64bit
+#OC command line
 RUN set -x && \
     mkdir /tmp/oc && \
-    curl -sLo /tmp/oc/openshift-origin-client-tools-v3.9.0-191fece-linux-64bit.tar.gz https://github.com/openshift/origin/releases/download/v3.9.0/openshift-origin-client-tools-v3.9.0-191fece-linux-64bit.tar.gz && \
-    tar -xzf /tmp/oc/openshift-origin-client-tools-v3.9.0-191fece-linux-64bit.tar.gz -C /tmp/oc  --strip-components=1 && \
+    curl -fsSL https://github.com/openshift/origin/releases/download/${OC_VERSION}/openshift-origin-client-tools-${OC_VERSION}-${OC_QUALIFIER}.tar.gz -o /tmp/oc/openshift-origin-client-tools.tar.gz && \
+    tar -xzf /tmp/oc/openshift-origin-client-tools.tar.gz -C /tmp/oc  --strip-components=1 && \
     cp /tmp/oc/oc /usr/local/bin/ && \
-    chmod 555 /usr/local/bin/oc && \
+    chmod +x /usr/local/bin/oc && \
     rm -rf /tmp/oc
 
 COPY ./contrib/jenkins/support/bin /usr/local/bin
@@ -20,16 +39,18 @@ COPY ./contrib/jenkins/support/bin /usr/local/bin
 COPY ./contrib/jenkins/configuration /opt/jenkins
 COPY ./contrib/openshift /opt/openshift
 
-# When bash is started non-interactively, to run a shell script, for example it
-# looks for this variable and source the content of this file. This will enable
-# the SCL for all scripts without need to do 'scl enable'.
-ENV BASH_ENV=/usr/local/bin/scl_enable \
-    ENV=/usr/local/bin/scl_enable \
-    PROMPT_COMMAND=". /usr/local/bin/scl_enable"
-
 RUN set -x && \
     curl -sLo /usr/local/bin/dumb-init https://github.com/Yelp/dumb-init/releases/download/v1.2.2/dumb-init_1.2.2_amd64 && \
-    chmod 555 /usr/local/bin/dumb-init
+    chmod +x /usr/local/bin/dumb-init
+
+ARG TINI_VERSION=v0.16.1
+ARG TINI_QUALIFIER=v0.16.1
+RUN curl -fsSL https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini-static-${TINI_QUALIFIER} -o /sbin/tini \
+  && curl -fsSL https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini-static-${TINI_QUALIFIER}.asc -o /sbin/tini.asc \
+  && gpg --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 595E85A6B1B4779EA4DAAEC70B588DFF0527A9B7 \
+  && gpg --verify /sbin/tini.asc \
+  && rm -rf /sbin/tini.asc /root/.gnupg \
+  && chmod +x /sbin/tini
 
 RUN set -x && \
     curl -sLo /usr/lib/jenkins/swarm-client.jar https://repo.jenkins-ci.org/releases/org/jenkins-ci/plugins/swarm-client/3.9/swarm-client-3.9.jar && \
