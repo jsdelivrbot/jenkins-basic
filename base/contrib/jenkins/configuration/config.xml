@@ -3,8 +3,8 @@
   <disabledAdministrativeMonitors/>
   <version>2.121.2</version>
   <installStateName>RUNNING</installStateName>
-  <numExecutors>2</numExecutors>
-  <mode>NORMAL</mode>
+  <numExecutors>0</numExecutors>
+  <mode>EXCLUSIVE</mode>
   <useSecurity>true</useSecurity>
   <authorizationStrategy class="hudson.security.GlobalMatrixAuthorizationStrategy">
   </authorizationStrategy>
