@@ -7,8 +7,10 @@ OCP_PIPELINE_DIR="/tmp/ocp-pipeline-${OCP_PIPELINE_VERSION}"
 
 if [ ! -d "${OCP_PIPELINE_DIR}" ] ; then
     if [ ! -f "${OCP_PIPELINE_DOWNLOAD_FILE}" ] ; then
+        #echo "Downloading"
         curl -sSf "${OCP_PIPELINE_DOWNLOAD_URL}" -o "${OCP_PIPELINE_DOWNLOAD_FILE}"
     fi
+    #echo "Extracting"
     mkdir -p "${OCP_PIPELINE_DIR}"
     tar -xzf "${OCP_PIPELINE_DOWNLOAD_FILE}" -C "${OCP_PIPELINE_DIR}"
 fi
