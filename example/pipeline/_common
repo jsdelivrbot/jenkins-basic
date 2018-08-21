@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+OCP_PIPELINE_VERSION='0.0.3'
+OCP_PIPELINE_DOWNLOAD_URL="https://dl.bintray.com/cvarjao/maven/ca/bc/gov/devops/cd/pipeline/ocp-pipeline/${OCP_PIPELINE_VERSION}/ocp-pipeline-${OCP_PIPELINE_VERSION}.jar"
+OCP_PIPELINE_DOWNLOAD_FILE="/tmp/ocp-pipeline-${OCP_PIPELINE_VERSION}.jar"
+OCP_PIPELINE_DIR="/tmp/ocp-pipeline-${OCP_PIPELINE_VERSION}"
+
+if [ ! -d "${OCP_PIPELINE_DIR}" ] ; then
+    if [ ! -f "${OCP_PIPELINE_DOWNLOAD_FILE}" ] ; then
+        curl -sSf "${OCP_PIPELINE_DOWNLOAD_URL}" -o "${OCP_PIPELINE_DOWNLOAD_FILE}"
+    fi
+    mkdir -p "${OCP_PIPELINE_DIR}"
+    tar -xzf "${OCP_PIPELINE_DOWNLOAD_FILE}" -C "${OCP_PIPELINE_DIR}"
+fi
