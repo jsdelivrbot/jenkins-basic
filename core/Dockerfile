@@ -71,15 +71,15 @@ COPY ./contrib/bin /usr/local/bin
 RUN set -x && \
     java -version && \
     mkdir -p $JENKINS_HOME && \
+    chmod -R 666 $JENKINS_HOME && \
+    chgrp -R 0 $JENKINS_HOME && \
+    chmod -R g+rwX $JENKINS_HOME && \
     chmod 664 /etc/passwd && \
     chmod -R 666 /etc/sysconfig/jenkins && \
     chgrp -R 0 /var/log/jenkins && \
     chmod -R 666 /var/log/jenkins && \
-    chmod -R 666 $JENKINS_HOME && \
     chgrp -R 0 /usr/local/bin && \
     chmod -R g+rx /usr/local/bin && \
-    chgrp -R 0 $JENKINS_HOME && \
-    chmod -R g+rwX $JENKINS_HOME && \
     chgrp -R 0 /var/log && \
     chmod -R g+rwX /var/log && \
     chgrp -R 0 /var/cache/jenkins && \

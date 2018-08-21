@@ -2,7 +2,7 @@ FROM local/jenkins:core
 
 USER root
 
-COPY ./contrib/jenkins/configuration $JENKINS_REF_HOME
+#COPY ./contrib/jenkins/configuration $JENKINS_REF_HOME
 
 RUN set -x && \
     chgrp -R 0 $JENKINS_REF_HOME && \
