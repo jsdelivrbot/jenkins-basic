@@ -34,11 +34,6 @@ RUN set -x && \
     chmod +x /usr/local/bin/oc && \
     rm -rf /tmp/oc
 
-COPY ./contrib/jenkins/support/bin /usr/local/bin
-#Default Configuration
-COPY ./contrib/jenkins/configuration /opt/jenkins
-COPY ./contrib/openshift /opt/openshift
-
 RUN set -x && \
     curl -sLo /usr/local/bin/dumb-init https://github.com/Yelp/dumb-init/releases/download/v1.2.2/dumb-init_1.2.2_amd64 && \
     chmod +x /usr/local/bin/dumb-init
@@ -52,8 +47,9 @@ RUN curl -fsSL https://github.com/krallin/tini/releases/download/${TINI_VERSION}
   && rm -rf /sbin/tini.asc /root/.gnupg \
   && chmod +x /sbin/tini
 
+ARG SWARM_CLIENT_VERSION=3.9
 RUN set -x && \
-    curl -sLo /usr/lib/jenkins/swarm-client.jar https://repo.jenkins-ci.org/releases/org/jenkins-ci/plugins/swarm-client/3.9/swarm-client-3.9.jar && \
+    curl -sLo /usr/lib/jenkins/swarm-client.jar https://repo.jenkins-ci.org/releases/org/jenkins-ci/plugins/swarm-client/${SWARM_CLIENT_VERSION}/swarm-client-${SWARM_CLIENT_VERSION}.jar && \
     chmod 644 /usr/lib/jenkins/swarm-client.jar
 
 ENV JENKINS_VERSION=2 \
@@ -65,13 +61,12 @@ ENV JENKINS_VERSION=2 \
     LANG=en_US.UTF-8 \
     LC_ALL=en_US.UTF-8
 
+# RUN (export REF=/opt/jenkins/plugins; /usr/local/bin/jenkins-install-plugins /opt/openshift/plugins.txt)
 RUN set -x && \
     curl -sLo /usr/local/bin/jenkins-install-plugins https://raw.githubusercontent.com/openshift/jenkins/master/2/contrib/jenkins/install-plugins.sh && \
-    chmod 555 /usr/local/bin/jenkins-install-plugins && \
-    (export REF=/opt/jenkins/plugins; /usr/local/bin/jenkins-install-plugins /opt/openshift/plugins.txt) && \
-    chgrp -R 0 $JENKINS_REF_HOME && \
-    chmod -R 644 $JENKINS_REF_HOME && \
-    chmod -R g+rwX $JENKINS_REF_HOME
+    chmod 555 /usr/local/bin/jenkins-install-plugins
+
+COPY ./contrib/bin /usr/local/bin
 
 RUN set -x && \
     java -version && \
