@@ -61,9 +61,9 @@ ENV JENKINS_VERSION=2 \
     LANG=en_US.UTF-8 \
     LC_ALL=en_US.UTF-8
 
-# RUN (export REF=/opt/jenkins/plugins; /usr/local/bin/jenkins-install-plugins /opt/openshift/plugins.txt)
 RUN set -x && \
     curl -sLo /usr/local/bin/jenkins-install-plugins https://raw.githubusercontent.com/openshift/jenkins/master/2/contrib/jenkins/install-plugins.sh && \
+    mkdir -p ${JENKINS_REF_HOME} && \
     chmod 555 /usr/local/bin/jenkins-install-plugins
 
 COPY ./contrib/bin /usr/local/bin
