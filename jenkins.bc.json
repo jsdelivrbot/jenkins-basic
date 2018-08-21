@@ -57,7 +57,7 @@
             "kind": "ImageStream",
             "apiVersion": "v1",
             "metadata": {
-                "name": "${NAME}-base",
+                "name": "${NAME}-basic",
                 "creationTimestamp": null
             },
             "spec": {
@@ -83,7 +83,7 @@
             "kind": "BuildConfig",
             "apiVersion": "v1",
             "metadata": {
-                "name": "${NAME}-base",
+                "name": "${NAME}-basic",
                 "creationTimestamp": null
             },
             "spec": {
@@ -101,7 +101,7 @@
                     "git": {
                         "uri": "https://github.com/cvarjao/jenkins-basic.git"
                     },
-                    "contextDir": "base"
+                    "contextDir": "basic"
                 },
                 "strategy": {
                     "type": "Docker",
@@ -115,7 +115,7 @@
                 "output": {
                     "to": {
                         "kind": "ImageStreamTag",
-                        "name": "${NAME}-base:${VERSION}"
+                        "name": "${NAME}-basic:${VERSION}"
                     }
                 },
                 "resources": {
@@ -163,7 +163,7 @@
                     "dockerStrategy": {
                         "from": {
                             "kind": "ImageStreamTag",
-                            "name": "${NAME}-base:${VERSION}"
+                            "name": "${NAME}-basic:${VERSION}"
                         }
                     }
                 },
