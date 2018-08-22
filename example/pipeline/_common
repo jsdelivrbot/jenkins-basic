@@ -5,6 +5,8 @@ OCP_PIPELINE_DOWNLOAD_URL="https://dl.bintray.com/cvarjao/maven/ca/bc/gov/devops
 OCP_PIPELINE_DOWNLOAD_FILE="/tmp/ocp-pipeline-${OCP_PIPELINE_VERSION}.jar"
 OCP_PIPELINE_DIR="/tmp/ocp-pipeline-${OCP_PIPELINE_VERSION}"
 
+OCP_PIPELINE_DIR='/Users/cvarjao/Documents/GitHub/bcdevops/ocp-cd-pipeline/src/main/groovy'
+
 if [ ! -d "${OCP_PIPELINE_DIR}" ] ; then
     if [ ! -f "${OCP_PIPELINE_DOWNLOAD_FILE}" ] ; then
         #echo "Downloading"
