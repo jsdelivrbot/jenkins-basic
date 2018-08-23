@@ -45,7 +45,8 @@
             "metadata": {
                 "name": "${NAME}-slave-user",
                 "annotations": {
-                    "as-copy-of": "template.${NAME}-slave-user"
+                    "as-copy-of": "template.${NAME}-slave-user",
+                    "as-copy-of/preserve": "password"
                 }
             },
             "stringData": {
