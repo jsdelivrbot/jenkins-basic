@@ -2,7 +2,7 @@
 
 
 GROOVY_DOWNLOAD_URL='https://dl.bintray.com/groovy/maven/apache-groovy-binary-2.5.2.zip'
-GROOVY_DOWNLOAD_FILE="${APP_HOME}/~`basename "$GROOVY_DOWNLOAD_URL"`"
+GROOVY_DOWNLOAD_FILE="/tmp/~`basename "$GROOVY_DOWNLOAD_URL"`"
 
 GROOVY_DIR="/tmp/.groovy"
 if [ ! -d "${GROOVY_DIR}" ] ; then
@@ -12,7 +12,7 @@ if [ ! -d "${GROOVY_DIR}" ] ; then
     fi
     info "Extracting Groovy"
     mkdir -p "${GROOVY_DIR}"
-    tar -xzf "${GROOVY_DOWNLOAD_FILE}" -C "${GROOVY_DIR}"
+    unzip -oq "${GROOVY_DOWNLOAD_FILE}" -d "${GROOVY_DIR}"
 fi
 GROOVYCMD="`find "${GROOVY_DIR}/" -type f -name 'groovy' -perm +111`"
 
@@ -34,5 +34,5 @@ if [ ! -d "${OCP_PIPELINE_DIR}" ] ; then
     fi
     #echo "Extracting"
     mkdir -p "${OCP_PIPELINE_DIR}"
-    tar -xzf "${OCP_PIPELINE_DOWNLOAD_FILE}" -C "${OCP_PIPELINE_DIR}"
+    unzip -oq "${OCP_PIPELINE_DOWNLOAD_FILE}" -d "${OCP_PIPELINE_DIR}"
 fi
