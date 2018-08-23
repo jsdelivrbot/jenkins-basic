@@ -24,6 +24,16 @@
             "description": "A version used for the image tags",
             "value": "7.5-408",
             "required": true
+        },
+        {
+            "name": "SOURCE_REPOSITORY_URL",
+            "required": true,
+            "value": "https://github.com/cvarjao/jenkins-basic.git"
+        },
+        {
+            "name": "SOURCE_REPOSITORY_REF",
+            "required": false,
+            "value": "master"
         }
     ],
     "objects": [
@@ -112,7 +122,8 @@
                 "source": {
                     "type": "Git",
                     "git": {
-                        "uri": "https://github.com/cvarjao/jenkins-basic.git"
+                        "uri": "${SOURCE_REPOSITORY_URL}",
+                        "ref": "${SOURCE_REPOSITORY_REF}"
                     },
                     "contextDir": "core"
                 },
@@ -167,7 +178,8 @@
                 "source": {
                     "type": "Git",
                     "git": {
-                        "uri": "https://github.com/cvarjao/jenkins-basic.git"
+                        "uri": "${SOURCE_REPOSITORY_URL}",
+                        "ref": "${SOURCE_REPOSITORY_REF}"
                     },
                     "contextDir": "basic"
                 },
