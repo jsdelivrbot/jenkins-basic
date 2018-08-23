@@ -5,7 +5,7 @@ pipeline {
     }
     stages {
         stage('Build') {
-            agent { label 'master' }
+            agent { label 'build' }
             steps {
                 sh "[ \"\$(git diff --name-only HEAD~1..HEAD | grep -v '^example/' | wc -l)\" -eq 0 ] && false || true"
                 echo "Aborting all running jobs ..."
