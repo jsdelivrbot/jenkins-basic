@@ -50,7 +50,7 @@ pipeline-stage-step:2.3
 pipeline-stage-tags-metadata:1.3.1
 rebuild:1.28
 workflow-cps:2.54
-workflow-durable-task-step:2.20
+workflow-durable-task-step:2.21
 workflow-job:2.24
 branch-api:2.0.20
 docker-workflow:1.17
