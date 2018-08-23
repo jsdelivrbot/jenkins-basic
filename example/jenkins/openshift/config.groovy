@@ -32,7 +32,7 @@ app {
         timeoutInSeconds = 60*20 // 20 minutes
         templates = [
                 [
-                    'file':'example/backend/openshift/jenkins.bc.json',
+                    'file':'example/jenkins/openshift/jenkins.bc.json',
                     'params':[
                         'NAME': "${app.build.name}",
                         'VERSION': app.build.version
@@ -54,7 +54,7 @@ app {
         timeoutInSeconds = 60*20 // 20 minutes
         templates = [
                 [
-                    'file':'example/backend/openshift/jenkins.dc.json',
+                    'file':'example/jenkins/openshift/jenkins.dc.json',
                     'params':[
                         'NAME':app.deployment.name,
                         'VERSION': app.deployment.version
