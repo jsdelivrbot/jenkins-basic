@@ -35,7 +35,9 @@ app {
                     'file':'example/jenkins/openshift/jenkins.bc.json',
                     'params':[
                         'NAME': "${app.build.name}",
-                        'VERSION': app.build.version
+                        'VERSION': app.build.version,
+                        'SOURCE_REPOSITORY_URL': "${app.git.uri}"
+                        'SOURCE_REPOSITORY_REF': "${app.git.ref}"
                     ]
                 ]
         ]
