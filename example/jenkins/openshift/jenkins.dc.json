@@ -43,7 +43,10 @@
             "kind": "Secret",
             "apiVersion": "v1",
             "metadata": {
-                "name": "${NAME}-slave-user"
+                "name": "${NAME}-slave-user",
+                "annotations": {
+                    "as-copy-of": "template.${NAME}-slave-user"
+                }
             },
             "stringData": {
                 "metadata.name": "${NAME}-slave-user",
@@ -55,7 +58,10 @@
             "kind": "Secret",
             "apiVersion": "v1",
             "metadata": {
-                "name": "${NAME}-github"
+                "name": "${NAME}-github",
+                "annotations":{
+                    "as-copy-of": "template.${NAME}-github"
+                }
             },
             "stringData": {
                 "metadata.name": "${NAME}-github",
