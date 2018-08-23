@@ -22,5 +22,12 @@ pipeline {
                 sh 'example/pipeline/cd-build --pr=1 --config=example/jenkins/openshift/config.groovy --env=dev'
             }
         }
+        stage('Deploy') {
+            agent { label 'deploy' }
+            steps {
+                echo "Deploying ..."
+                sh 'example/pipeline/cd-build --pr=1 --config=example/jenkins/openshift/config.groovy --env=dev'
+            }
+        }
     }
 }
