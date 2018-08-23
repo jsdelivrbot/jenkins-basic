@@ -1,6 +1,21 @@
 #!/usr/bin/env bash
 
 
+info () {
+    echo "$*"
+}
+
+warn () {
+    echo "$*"
+}
+
+die () {
+    echo
+    echo "$*"
+    echo
+    exit 1
+}
+
 GROOVY_DOWNLOAD_URL='https://dl.bintray.com/groovy/maven/apache-groovy-binary-2.5.2.zip'
 GROOVY_DOWNLOAD_FILE="/tmp/~`basename "$GROOVY_DOWNLOAD_URL"`"
 
@@ -31,10 +46,10 @@ OCP_PIPELINE_DIR="/tmp/ocp-pipeline-${OCP_PIPELINE_VERSION}"
 
 if [ ! -d "${OCP_PIPELINE_DIR}" ] ; then
     if [ ! -f "${OCP_PIPELINE_DOWNLOAD_FILE}" ] ; then
-        #echo "Downloading"
+        info "Downloading JDK"
         curl -sSf "${OCP_PIPELINE_DOWNLOAD_URL}" -o "${OCP_PIPELINE_DOWNLOAD_FILE}"
     fi
-    #echo "Extracting"
+    info "Extracting JDK"
     mkdir -p "${OCP_PIPELINE_DIR}"
     unzip -oq "${OCP_PIPELINE_DOWNLOAD_FILE}" -d "${OCP_PIPELINE_DIR}"
 fi
