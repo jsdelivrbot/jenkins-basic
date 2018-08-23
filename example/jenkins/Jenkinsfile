@@ -13,12 +13,13 @@ pipeline {
                         currentBuild.rawBuild.delete()
                         error("No changes detected in the path (!'^example/')")
                     }
-                }"
+                }
                 echo "Aborting all running jobs ..."
                 script {
                     abortAllPreviousBuildInProgress(currentBuild)
                 }
                 echo "Building ..."
+                sh 'example/pipeline/cd-build --pr=1 --config=example/jenkins/openshift/config.groovy --env=dev'
             }
         }
     }
