@@ -19,7 +19,8 @@ GROOVYCMD="${GROOVY_DIR}/groovy-2.5.2/bin/groovy"
 
 #echo "JAVACMD=${JAVACMD}"
 export JAVACMD
-export JAVA_OPTS='--add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.lang.invoke=ALL-UNNAMED'
+#for java 10
+#export JAVA_OPTS='--add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.lang.invoke=ALL-UNNAMED'
 
 OCP_PIPELINE_VERSION='0.0.4'
 OCP_PIPELINE_DOWNLOAD_URL="https://dl.bintray.com/cvarjao/maven/ca/bc/gov/devops/cd/pipeline/ocp-pipeline/${OCP_PIPELINE_VERSION}/ocp-pipeline-${OCP_PIPELINE_VERSION}.jar"
