@@ -21,4 +21,4 @@ cd "$SAVED" >/dev/null
 source "${PRG_DIR}/_common"
 
 #find "${OCP_PIPELINE_DIR}" -type f
-groovy -cp "${OCP_PIPELINE_DIR}" "${OCP_PIPELINE_DIR}/example/build.groovy" "$@"
+exec "${GROOVYCMD}" -cp "${OCP_PIPELINE_DIR}" "${OCP_PIPELINE_DIR}/example/build.groovy" "$@"

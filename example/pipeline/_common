@@ -1,5 +1,25 @@
 #!/usr/bin/env bash
 
+
+GROOVY_DOWNLOAD_URL='https://dl.bintray.com/groovy/maven/apache-groovy-binary-2.5.2.zip'
+GROOVY_DOWNLOAD_FILE="${APP_HOME}/~`basename "$GROOVY_DOWNLOAD_URL"`"
+
+GROOVY_DIR="/tmp/.groovy"
+if [ ! -d "${GROOVY_DIR}" ] ; then
+    if [ ! -f "${GROOVY_DOWNLOAD_FILE}" ] ; then
+        info "Downloading Groovy"
+        curl -sL -o "${GROOVY_DOWNLOAD_FILE}" "${GROOVY_DOWNLOAD_URL}"
+    fi
+    info "Extracting Groovy"
+    mkdir -p "${GROOVY_DIR}"
+    tar -xzf "${GROOVY_DOWNLOAD_FILE}" -C "${GROOVY_DIR}"
+fi
+GROOVYCMD="`find "${GROOVY_DIR}/" -type f -name 'groovy' -perm +111`"
+
+#echo "JAVACMD=${JAVACMD}"
+export JAVACMD
+export JAVA_OPTS='--add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.lang.invoke=ALL-UNNAMED'
+
 OCP_PIPELINE_VERSION='0.0.4'
 OCP_PIPELINE_DOWNLOAD_URL="https://dl.bintray.com/cvarjao/maven/ca/bc/gov/devops/cd/pipeline/ocp-pipeline/${OCP_PIPELINE_VERSION}/ocp-pipeline-${OCP_PIPELINE_VERSION}.jar"
 OCP_PIPELINE_DOWNLOAD_FILE="/tmp/ocp-pipeline-${OCP_PIPELINE_VERSION}.jar"
