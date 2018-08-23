@@ -14,7 +14,8 @@ if [ ! -d "${GROOVY_DIR}" ] ; then
     mkdir -p "${GROOVY_DIR}"
     unzip -oq "${GROOVY_DOWNLOAD_FILE}" -d "${GROOVY_DIR}"
 fi
-GROOVYCMD="`find "${GROOVY_DIR}/" -type f -name 'groovy' -perm +111`"
+#find "${GROOVY_DIR}/" -type f -name 'groovy' -perm +111
+GROOVYCMD="${GROOVY_DIR}/groovy-2.5.2/bin/groovy"
 
 #echo "JAVACMD=${JAVACMD}"
 export JAVACMD
