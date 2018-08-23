@@ -25,7 +25,7 @@ app {
             id = "pr-1"
         }
         id = "${app.name}"
-        version = "v1"
+        version = "${app.build.env.name}-v1"
         name = "${app.name}" //
 
         namespace = app.namespaces.'build'.namespace
@@ -47,7 +47,7 @@ app {
             id = vars.deployment.env.id
         }
         id = "${app.name}" // app (unique name across all deployments int he namespace)
-        version = "v1" //app-version  and tag
+        version = "${app.deployment.env.name}-v1" //app-version  and tag
         name = "${app.name}" //app-name   (same name accross all deployments)
 
         namespace = "${vars.deployment.namespace}"
