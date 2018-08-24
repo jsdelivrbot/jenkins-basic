@@ -13,6 +13,12 @@
             "required": true,
             "value": "jenkins-atomic"
         },{
+            "name": "SUFFIX",
+            "displayName": "Suffix",
+            "description": "A name suffix used for all objects",
+            "required": false,
+            "value": ""
+        },{
             "name": "VERSION",
             "displayName": "version",
             "description": "A version used for the image tags",
@@ -162,7 +168,7 @@
             "kind": "BuildConfig",
             "apiVersion": "v1",
             "metadata": {
-                "name": "${NAME}-basic",
+                "name": "${NAME}${SUFFIX}-basic",
                 "creationTimestamp": null
             },
             "spec": {
@@ -200,12 +206,12 @@
                 },
                 "resources": {
                     "limits": {
-                        "cpu": "1",
-                        "memory": "1Gi"
+                        "cpu": "250m",
+                        "memory": "500Mi"
                     },
                     "requests": {
-                        "cpu": "1",
-                        "memory": "1Gi"
+                        "cpu": "100m",
+                        "memory": "256Mi"
                     }
                 },
                 "postCommit": {},
@@ -218,7 +224,7 @@
             "kind": "BuildConfig",
             "apiVersion": "v1",
             "metadata": {
-                "name": "${NAME}",
+                "name": "${NAME}${SUFFIX}",
                 "creationTimestamp": null
             },
             "spec": {

@@ -13,6 +13,12 @@
             "value": "jenkins-atomic",
             "required": true
         },{
+            "name": "SUFFIX",
+            "displayName": "Suffix",
+            "description": "A name suffix used for all objects",
+            "required": false,
+            "value": ""
+        },{
             "name": "VERSION",
             "displayName": "version",
             "description": "A version used for the image tags",
@@ -36,40 +42,21 @@
             "description": "ROUTE_PATH",
             "value": "/",
             "required": true
+        },{
+            "name": "ENV_NAME",
+            "displayName": "ENV_NAME",
+            "description": "Environment Name",
+            "value": "dev",
+            "required": true
+        },{
+            "name": "ENV_ID",
+            "displayName": "ENV_ID",
+            "description": "Environment ID",
+            "value": "dev-1",
+            "required": true
         }
     ],
     "objects": [
-        {
-            "kind": "Secret",
-            "apiVersion": "v1",
-            "metadata": {
-                "name": "${NAME}-slave-user",
-                "annotations": {
-                    "as-copy-of": "template.${NAME}-slave-user",
-                    "as-copy-of/preserve": "password"
-                }
-            },
-            "stringData": {
-                "metadata.name": "${NAME}-slave-user",
-                "username": "jenkins-slave"
-            },
-            "type": "kubernetes.io/basic-auth"
-        },
-        {
-            "kind": "Secret",
-            "apiVersion": "v1",
-            "metadata": {
-                "name": "${NAME}-github",
-                "annotations":{
-                    "as-copy-of": "template.${NAME}-github"
-                }
-            },
-            "stringData": {
-                "metadata.name": "${NAME}-github",
-                "username": "${GITHUB_USERNAME}"
-            },
-            "type": "kubernetes.io/basic-auth"
-        },
         {
             "kind": "ImageStream",
             "apiVersion": "v1",
@@ -84,10 +71,41 @@
             }
         },
         {
+            "kind": "Secret",
+            "apiVersion": "v1",
+            "metadata": {
+                "name": "${NAME}${SUFFIX}-slave-user",
+                "annotations": {
+                    "as-copy-of": "template.${NAME}-slave-user",
+                    "as-copy-of/preserve": "password"
+                }
+            },
+            "stringData": {
+                "metadata.name": "${NAME}${SUFFIX}-slave-user",
+                "username": "jenkins-slave"
+            },
+            "type": "kubernetes.io/basic-auth"
+        },
+        {
+            "kind": "Secret",
+            "apiVersion": "v1",
+            "metadata": {
+                "name": "${NAME}${SUFFIX}-github",
+                "annotations":{
+                    "as-copy-of": "template.${NAME}-github"
+                }
+            },
+            "stringData": {
+                "metadata.name": "${NAME}${SUFFIX}-github",
+                "username": "${GITHUB_USERNAME}"
+            },
+            "type": "kubernetes.io/basic-auth"
+        },
+        {
             "kind": "PersistentVolumeClaim",
             "apiVersion": "v1",
             "metadata": {
-                "name": "${NAME}",
+                "name": "${NAME}${SUFFIX}",
                 "annotations": {
                     "volume.beta.kubernetes.io/storage-class": "gluster-file",
                     "volume.beta.kubernetes.io/storage-provisioner": "kubernetes.io/glusterfs"
@@ -109,9 +127,9 @@
             "kind": "ServiceAccount",
             "metadata": {
                 "annotations": {
-                    "serviceaccounts.openshift.io/oauth-redirectreference.jenkins": "{\"kind\":\"OAuthRedirectReference\",\"apiVersion\":\"v1\",\"reference\":{\"kind\":\"Route\",\"name\":\"${NAME}\"}}"
+                    "serviceaccounts.openshift.io/oauth-redirectreference.jenkins": "{\"kind\":\"OAuthRedirectReference\",\"apiVersion\":\"v1\",\"reference\":{\"kind\":\"Route\",\"name\":\"${NAME}${SUFFIX}\"}}"
                 },
-                "name": "${NAME}"
+                "name": "${NAME}${SUFFIX}"
             }
         },
         {
@@ -119,7 +137,7 @@
             "groupNames": null,
             "kind": "RoleBinding",
             "metadata": {
-                "name": "${NAME}_edit"
+                "name": "${NAME}${SUFFIX}_edit"
             },
             "roleRef": {
                 "name": "edit"
@@ -127,7 +145,7 @@
             "subjects": [
                 {
                     "kind": "ServiceAccount",
-                    "name": "${NAME}"
+                    "name": "${NAME}${SUFFIX}"
                 }
             ]
         },
@@ -136,7 +154,7 @@
             "groupNames": null,
             "kind": "RoleBinding",
             "metadata": {
-                "name": "${NAME}_admin"
+                "name": "${NAME}${SUFFIX}_admin"
             },
             "roleRef": {
                 "name": "admin"
@@ -144,7 +162,7 @@
             "subjects": [
                 {
                     "kind": "ServiceAccount",
-                    "name": "${NAME}"
+                    "name": "${NAME}${SUFFIX}"
                 }
             ]
         },
@@ -152,7 +170,7 @@
             "kind": "DeploymentConfig",
             "apiVersion": "v1",
             "metadata": {
-                "name": "${NAME}",
+                "name": "${NAME}${SUFFIX}",
                 "creationTimestamp": null
             },
             "spec": {
@@ -184,13 +202,13 @@
                 "revisionHistoryLimit": 10,
                 "test": false,
                 "selector": {
-                    "deploymentconfig": "${NAME}"
+                    "deploymentconfig": "${NAME}${SUFFIX}"
                 },
                 "template": {
                     "metadata": {
                         "creationTimestamp": null,
                         "labels": {
-                            "deploymentconfig": "${NAME}"
+                            "deploymentconfig": "${NAME}${SUFFIX}"
                         }
                     },
                     "spec": {
@@ -198,7 +216,7 @@
                             {
                                 "name": "jenkins-home",
                                 "persistentVolumeClaim": {
-                                    "claimName": "${NAME}"
+                                    "claimName": "${NAME}${SUFFIX}"
                                 }
                             },
                             {
@@ -215,14 +233,14 @@
                             {
                                 "name": "jenkins-slave-user",
                                 "secret": {
-                                    "secretName": "${NAME}-slave-user",
+                                    "secretName": "${NAME}${SUFFIX}-slave-user",
                                     "defaultMode": 420
                                 }
                             },
                             {
                                 "name": "github",
                                 "secret": {
-                                    "secretName": "${NAME}-github",
+                                    "secretName": "${NAME}${SUFFIX}-github",
                                     "defaultMode": 420
                                 }
                             }
@@ -252,6 +270,12 @@
                                     },{
                                         "name": "JENKINS_URL",
                                         "value": "https://${ROUTE_HOST}${ROUTE_PATH}"
+                                    },{
+                                        "name": "ENV_NAME",
+                                        "value": "${ENV_NAME}"
+                                    },{
+                                        "name": "ENV_ID",
+                                        "value": "${ENV_ID}"
                                     }
                                 ],
                                 "volumeMounts": [
@@ -290,8 +314,8 @@
                         "dnsPolicy": "ClusterFirst",
                         "securityContext": {},
                         "schedulerName": "default-scheduler",
-                        "serviceAccountName": "${NAME}",
-                        "serviceAccount": "${NAME}"
+                        "serviceAccountName": "${NAME}${SUFFIX}",
+                        "serviceAccount": "${NAME}${SUFFIX}"
                     }
                 }
             }
@@ -300,7 +324,7 @@
             "kind": "DeploymentConfig",
             "apiVersion": "v1",
             "metadata": {
-                "name": "${NAME}-slave-build",
+                "name": "${NAME}${SUFFIX}-slave-build",
                 "creationTimestamp": null
             },
             "spec": {
@@ -332,13 +356,13 @@
                 "revisionHistoryLimit": 10,
                 "test": false,
                 "selector": {
-                    "deploymentconfig": "${NAME}-slave-build"
+                    "deploymentconfig": "${NAME}${SUFFIX}-slave-build"
                 },
                 "template": {
                     "metadata": {
                         "creationTimestamp": null,
                         "labels": {
-                            "deploymentconfig": "${NAME}-slave-build"
+                            "deploymentconfig": "${NAME}${SUFFIX}-slave-build"
                         }
                     },
                     "spec": {
@@ -346,7 +370,7 @@
                             {
                                 "name": "jenkins-home",
                                 "persistentVolumeClaim": {
-                                    "claimName": "${NAME}"
+                                    "claimName": "${NAME}${SUFFIX}"
                                 }
                             },
                             {
@@ -363,14 +387,14 @@
                             {
                                 "name": "jenkins-slave-user",
                                 "secret": {
-                                    "secretName": "${NAME}-slave-user",
+                                    "secretName": "${NAME}${SUFFIX}-slave-user",
                                     "defaultMode": 420
                                 }
                             },
                             {
                                 "name": "github",
                                 "secret": {
-                                    "secretName": "${NAME}-github",
+                                    "secretName": "${NAME}${SUFFIX}-github",
                                     "defaultMode": 420
                                 }
                             }
@@ -382,7 +406,7 @@
                                 "command":[
                                     "bash",
                                     "-c",
-                                    "cd $HOME && java -XshowSettings:vm -version && exec java -jar /usr/lib/jenkins/swarm-client.jar -name \"$(cat /etc/hostname)\" -deleteExistingClients -fsroot \"$JENKINS_HOME/$(cat /etc/hostname)\" -master http://jenkins-atomic:8080 -disableSslVerification -username  \"$(cat /var/run/secrets/jenkins-slave-user/username)\" -passwordFile /var/run/secrets/jenkins-slave-user/password -description \"$(cat /etc/hostname)\" -executors 2 -labels 'Linux rhel rhel7 build test deploy light' -mode 'normal' -retry 10 -tunnel jenkins-atomic:50000 -disableClientsUniqueId"
+                                    "cd $HOME && java -XshowSettings:vm -version && exec java -jar /usr/lib/jenkins/swarm-client.jar -name \"$(cat /etc/hostname)\" -deleteExistingClients -fsroot \"$JENKINS_HOME/$(cat /etc/hostname)\" -master http://$JENKINS_MASTER_SERVICE:8080 -disableSslVerification -username  \"$(cat /var/run/secrets/jenkins-slave-user/username)\" -passwordFile /var/run/secrets/jenkins-slave-user/password -description \"$(cat /etc/hostname)\" -executors 2 -labels 'Linux rhel rhel7 build test deploy light' -mode 'normal' -retry 10 -tunnel $JENKINS_MASTER_SERVICE:50000 -disableClientsUniqueId"
                                 ],
                                 "ports": [
                                     {
@@ -397,11 +421,17 @@
                                 "env": [
                                     {
                                         "name": "JENKINS_MASTER_SERVICE",
-                                        "value": "${NAME}"
+                                        "value": "${NAME}${SUFFIX}"
                                     },
                                     {
                                         "name": "JAVA_TOOL_OPTIONS",
                                         "value": "-XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap -XX:MaxRAMFraction=5 -XX:MaxHeapFreeRatio=20 -XX:MinHeapFreeRatio=10"
+                                    },{
+                                        "name": "ENV_NAME",
+                                        "value": "${ENV_NAME}"
+                                    },{
+                                        "name": "ENV_ID",
+                                        "value": "${ENV_ID}"
                                     }
                                 ],
                                 "volumeMounts": [
@@ -440,8 +470,8 @@
                         "dnsPolicy": "ClusterFirst",
                         "securityContext": {},
                         "schedulerName": "default-scheduler",
-                        "serviceAccountName": "${NAME}",
-                        "serviceAccount": "${NAME}"
+                        "serviceAccountName": "${NAME}${SUFFIX}",
+                        "serviceAccount": "${NAME}${SUFFIX}"
                     }
                 }
             }
@@ -450,7 +480,7 @@
             "kind": "Service",
             "apiVersion": "v1",
             "metadata": {
-                "name": "${NAME}",
+                "name": "${NAME}${SUFFIX}",
                 "creationTimestamp": null
             },
             "spec": {
@@ -469,7 +499,7 @@
                     }
                 ],
                 "selector": {
-                    "deploymentconfig": "${NAME}"
+                    "deploymentconfig": "${NAME}${SUFFIX}"
                 },
                 "type": "ClusterIP",
                 "sessionAffinity": "None"
@@ -479,7 +509,7 @@
             "kind": "Route",
             "apiVersion": "v1",
             "metadata": {
-                "name": "${NAME}",
+                "name": "${NAME}${SUFFIX}",
                 "creationTimestamp": null
             },
             "spec": {
@@ -487,7 +517,7 @@
                 "path": "${ROUTE_PATH}",
                 "to": {
                     "kind": "Service",
-                    "name": "${NAME}",
+                    "name": "${NAME}${SUFFIX}",
                     "weight": 100
                 },
                 "port": {
