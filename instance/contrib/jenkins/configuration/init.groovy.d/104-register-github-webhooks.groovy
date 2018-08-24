@@ -47,6 +47,8 @@ if ('prod'.equalsIgnoreCase(System.getenv('ENV_NAME'))){
                             println "Registering webhook for ${job.name}: ${[new URL(hookCfg.url), newHook.events]}"
                             ghRepository.createHook("web",["url":new URL(hookCfg.url).toExternalForm()], newHook.events,true)
                             //ghRepository.createWebHook(new URL(hookCfg.url), newHook.events)
+                        }else{
+                            println "Webhook already registered for ${job.name}: ${[new URL(hookCfg.url), newHook.events]}"
                         }
                     }
                 }
