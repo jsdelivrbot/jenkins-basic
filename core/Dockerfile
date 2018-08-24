@@ -61,15 +61,16 @@ ENV JENKINS_VERSION=2 \
     LANG=en_US.UTF-8 \
     LC_ALL=en_US.UTF-8
 
-RUN set -x && \
-    curl -sLo /usr/local/bin/jenkins-install-plugins https://raw.githubusercontent.com/openshift/jenkins/master/2/contrib/jenkins/install-plugins.sh && \
-    mkdir -p ${JENKINS_REF_HOME} && \
-    chmod 555 /usr/local/bin/jenkins-install-plugins
+#RUN set -x && \
+#    curl -sLo /usr/local/bin/jenkins-install-plugins https://raw.githubusercontent.com/openshift/jenkins/master/2/contrib/jenkins/install-plugins.sh && \
+#    mkdir -p ${JENKINS_REF_HOME} && \
+#    chmod 555 /usr/local/bin/jenkins-install-plugins
 
 COPY ./contrib/bin /usr/local/bin
 
 RUN set -x && \
     java -version && \
+    mkdir -p ${JENKINS_REF_HOME} && \
     mkdir -p $JENKINS_HOME && \
     chmod -R 666 $JENKINS_HOME && \
     chgrp -R 0 $JENKINS_HOME && \
