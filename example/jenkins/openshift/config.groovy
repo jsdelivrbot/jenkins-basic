@@ -1,6 +1,6 @@
 
 app {
-    name = 'jenkins-atomic'
+    name = "${opt.'name'?:'jenkins-atomic'}"
     namespaces { //can't call environments :(
         'build'{
             namespace = 'csnr-devops-lab-tools'
@@ -8,11 +8,11 @@ app {
         }
         'dev' {
             namespace = app.namespaces.'build'.namespace
-            disposable = false
+            disposable = true
         }
         'test' {
             namespace = app.namespaces.'build'.namespace
-            disposable = false
+            disposable = true
         }
         'prod' {
             namespace = app.namespaces.'build'.namespace

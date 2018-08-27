@@ -171,7 +171,10 @@
             "apiVersion": "v1",
             "metadata": {
                 "name": "${NAME}${SUFFIX}",
-                "creationTimestamp": null
+                "creationTimestamp": null,
+                "annotations": {
+                    "template.alpha.openshift.io/wait-for-ready": "true"
+                }
             },
             "spec": {
                 "strategy": {
@@ -249,6 +252,24 @@
                             {
                                 "name": "jenkins",
                                 "image": " ",
+                                "readinessProbe": {
+                                    "timeoutSeconds": 240,
+                                    "initialDelaySeconds": 3,
+                                    "httpGet": {
+                                    "path": "/login",
+                                    "port": 8080
+                                    }
+                                },
+                                "livenessProbe": {
+                                    "timeoutSeconds": 240,
+                                    "periodSeconds": 360,
+                                    "initialDelaySeconds": 420,
+                                    "failureThreshold" : 3,
+                                    "httpGet": {
+                                        "path": "/login",
+                                        "port": 8080
+                                    }
+                                },
                                 "command":[
                                     "/usr/local/bin/container-entrypoint",
                                     "/usr/local/bin/jenkins-run"
@@ -403,6 +424,34 @@
                             {
                                 "name": "jenkins",
                                 "image": " ",
+                                "livenessProbe": {
+                                    "exec": {
+                                        "command": [
+                                            "curl",
+                                            "-sSf",
+                                            "http://${NAME}${SUFFIX}:8080/login"
+                                        ]
+                                    },
+                                    "failureThreshold": 3,
+                                    "initialDelaySeconds": 420,
+                                    "periodSeconds": 10,
+                                    "successThreshold": 1,
+                                    "timeoutSeconds": 360
+                                },
+                                "readinessProbe": {
+                                    "exec": {
+                                        "command": [
+                                            "curl",
+                                            "-sSf",
+                                            "http://${NAME}${SUFFIX}:8080/login"
+                                        ]
+                                    },
+                                    "failureThreshold": 3,
+                                    "initialDelaySeconds": 3,
+                                    "periodSeconds": 10,
+                                    "successThreshold": 1,
+                                    "timeoutSeconds": 240
+                                },
                                 "command":[
                                     "bash",
                                     "-c",

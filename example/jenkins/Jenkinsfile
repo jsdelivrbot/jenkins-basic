@@ -51,7 +51,7 @@ pipeline {
             }
             steps {
                 echo "Cleaning ..."
-                sh "oc delete builds,bc,dc,rc,svc,routes,secret,pvc -l 'app-name=jenkins-atomic,env-name!=prod,!image-stream.name,env-id=pr-${CHANGE_ID}'"
+                sh "example/pipeline/cd-clean --pr=${CHANGE_ID} --config=example/jenkins/openshift/config.groovy"
             }
         }
         
