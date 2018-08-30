@@ -16,7 +16,8 @@ JENKINS_CONFIG=/etc/sysconfig/jenkins
 [ -f "$JENKINS_CONFIG" ] && . "$JENKINS_CONFIG"
 
 JENKINS_JAVA_CMD="/usr/bin/java"
-JENKINS_JAVA_OPTIONS='-XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap'
+JENKINS_JAVA_OPTIONS="${JENKINS_JAVA_OPTIONS:--XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap}"
+
 
 "${JENKINS_JAVA_CMD}" $JENKINS_JAVA_OPTIONS -XshowSettings:vm -version
 
