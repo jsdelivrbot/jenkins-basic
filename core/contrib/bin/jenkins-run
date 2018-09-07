@@ -37,6 +37,10 @@ echo "Running Jenkins System Installer(s)"
 echo "Running Jenkins Job Installer(s)"
 [ -d "$JENKINS_HOME/jobs" ] && find $JENKINS_HOME/jobs/ -maxdepth 2  -type f -name '*.install.groovy' -print0 | sort -z | xargs -r0 -I '{}' java -cp /var/cache/jenkins/war--daemon/WEB-INF/lib/groovy-all-2.4.11.jar groovy.lang.GroovyShell '{}' '{}'
 
+
+JENKINS_JAVA_OPTIONS="${JENKINS_JAVA_OPTIONS} -Dhudson.model.UpdateCenter.never=true -Dhudson.Util.noSymLink=true -Djenkins.model.Jenkins.buildsDir=\${JENKINS_HOME}/builds/\${ITEM_FULL_NAME}"
+
+
 JAVA_CMD="$JENKINS_JAVA_CMD $JENKINS_JAVA_OPTIONS -Djenkins.install.runSetupWizard=false -DJENKINS_HOME=$JENKINS_HOME -jar $JENKINS_WAR"
 PARAMS="--webroot=$JENKINS_WEBROOT_DIR"
 
