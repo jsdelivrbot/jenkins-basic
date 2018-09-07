@@ -18,6 +18,7 @@ pipeline {
                 script {
                     abortAllPreviousBuildInProgress(currentBuild)
                 }
+                echo "BRANCH_NAME:${env.BRANCH_NAME}\nCHANGE_ID:${env.CHANGE_ID}\nCHANGE_TARGET:${env.CHANGE_TARGET}"
                 echo "Building ..."
                 sh "example/pipeline/cd-build --pr=${CHANGE_ID} --config=example/jenkins/openshift/config.groovy"
             }
