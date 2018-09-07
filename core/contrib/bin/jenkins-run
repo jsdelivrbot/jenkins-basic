@@ -35,11 +35,11 @@ if [[ -z "$JAVA_GC_OPTS" ]]; then
   # The values are aggressively set with the intention of relaxing GC CPU time
   # restrictions to enable it to free as much as possible, as well as
   # encouraging the GC to free unused heap memory back to the OS.
-  JAVA_GC_OPTS="-XX:MaxRAMFraction=2 -XX:+UseParallelGC -XX:MinHeapFreeRatio=5 -XX:MaxHeapFreeRatio=10 -XX:GCTimeRatio=4 -XX:AdaptiveSizePolicyWeight=90"
+  JAVA_GC_OPTS="-XshowSettings:vm -XX:NativeMemoryTracking=summary -XX:MaxRAMFraction=2 -XX:+UseParallelGC -XX:MinHeapFreeRatio=5 -XX:MaxHeapFreeRatio=10 -XX:GCTimeRatio=4 -XX:AdaptiveSizePolicyWeight=90"
 fi
 
 if [[ "${USE_JAVA_DIAGNOSTICS}" ]]; then
-  JAVA_DIAGNOSTICS="-XX:NativeMemoryTracking=summary -XX:+PrintGC -XX:+PrintGCDateStamps -XX:+PrintGCTimeStamps -XX:+UnlockDiagnosticVMOptions"
+  JAVA_DIAGNOSTICS="-XX:+PrintGC -XX:+PrintGCDateStamps -XX:+PrintGCTimeStamps -XX:+UnlockDiagnosticVMOptions"
 fi
 
 if [[ -z "${JENKINS_OPTIONS}" ]]; then
@@ -47,7 +47,7 @@ if [[ -z "${JENKINS_OPTIONS}" ]]; then
 fi
 
 if [[ -z "${JENKINS_JAVA_OPTIONS}" ]]; then
-    JENKINS_JAVA_OPTIONS="-XshowSettings:vm $JAVA_GC_OPTS $JAVA_DIAGNOSTICS -Dfile.encoding=UTF8 -Djavamelody.displayed-counters=log,error -XX:ErrorFile=/var/lib/jenkins/logs/jvm.error.log $JENKINS_OPTIONS"
+    JENKINS_JAVA_OPTIONS="$JAVA_GC_OPTS $JAVA_DIAGNOSTICS -Dfile.encoding=UTF8 -Djavamelody.displayed-counters=log,error -XX:ErrorFile=/var/lib/jenkins/logs/jvm.error.log $JENKINS_OPTIONS"
 fi
 
 echo "JAVA_GC_OPTS=${JAVA_GC_OPTS}"
