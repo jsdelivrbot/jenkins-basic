@@ -240,7 +240,8 @@
                 "source": {
                     "type": "Git",
                     "git": {
-                        "uri": "https://github.com/cvarjao/jenkins-basic.git"
+                        "uri": "${SOURCE_REPOSITORY_URL}",
+                        "ref": "${SOURCE_REPOSITORY_REF}"
                     },
                     "contextDir": "instance"
                 },
