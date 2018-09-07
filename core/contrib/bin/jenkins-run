@@ -39,7 +39,7 @@ if [[ -z "$JAVA_GC_OPTS" ]]; then
 fi
 
 if [[ "${USE_JAVA_DIAGNOSTICS}" ]]; then
-  JAVA_DIAGNOSTICS="-XX:+PrintGC -XX:+PrintGCDateStamps -XX:+PrintGCTimeStamps -XX:+UnlockDiagnosticVMOptions"
+  JAVA_DIAGNOSTICS="-XX:+PrintGC -XX:+PrintGCDateStamps -XX:+PrintGCTimeStamps -XX:+PrintGCDetails -XX:+UnlockDiagnosticVMOptions -Xloggc:/var/log/jenkins/gc.log -XX:+UseGCLogFileRotation -XX:NumberOfGCLogFiles=5 -XX:GCLogFileSize=100M"
 fi
 
 if [[ -z "${JENKINS_OPTIONS}" ]]; then
