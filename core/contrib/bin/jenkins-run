@@ -12,8 +12,14 @@ function generate_passwd_file() {
 generate_passwd_file
 
 JENKINS_WAR="/usr/lib/jenkins/jenkins.war"
-JENKINS_CONFIG=/etc/sysconfig/jenkins
-[ -f "$JENKINS_CONFIG" ] && . "$JENKINS_CONFIG"
+JENKINS_PORT="8080"
+JENKINS_DEBUG_LEVEL="5"
+JENKINS_HANDLER_MAX="100"
+JENKINS_HANDLER_IDLE="20"
+JENKINS_USER="jenkins"
+
+#JENKINS_CONFIG=/etc/sysconfig/jenkins
+#[ -f "$JENKINS_CONFIG" ] && . "$JENKINS_CONFIG"
 
 JENKINS_JAVA_CMD="/usr/bin/java"
 
@@ -37,7 +43,7 @@ if [[ "${USE_JAVA_DIAGNOSTICS}" ]]; then
 fi
 
 if [[ -z "${JENKINS_OPTIONS}" ]]; then
-  JENKINS_OPTIONS="-Duser.timezone=America/Vancouver -Dhudson.model.DirectoryBrowserSupport.CSP= -Dhudson.model.UpdateCenter.never=true -Dhudson.Util.noSymLink=true -Djenkins.model.Jenkins.buildsDir=\${JENKINS_HOME}/builds/\${ITEM_FULL_NAME}"
+  JENKINS_OPTIONS="-Djava.awt.headless=true -Duser.timezone=America/Vancouver -Dhudson.model.DirectoryBrowserSupport.CSP= -Dhudson.model.UpdateCenter.never=true -Dhudson.Util.noSymLink=true -Djenkins.model.Jenkins.buildsDir=\${JENKINS_HOME}/builds/\${ITEM_FULL_NAME}"
 fi
 
 if [[ -z "${JENKINS_JAVA_OPTIONS}" ]]; then
