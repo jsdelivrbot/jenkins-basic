@@ -286,11 +286,8 @@
                                 ],
                                 "env": [
                                     {
-                                        "name": "JAVA_TOOL_OPTIONS",
-                                        "value": "-XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap -XX:MaxRAMFraction=4  -XX:MaxHeapFreeRatio=20 -XX:MinHeapFreeRatio=10"
-                                    },{
-                                        "name": "JENKINS_JAVA_OPTIONS",
-                                        "value": "-Duser.timezone=America/Vancouver -Dhudson.model.DirectoryBrowserSupport.CSP= -XX:+PrintGC -XX:+PrintGCDetails"
+                                        "name": "USE_JAVA_DIAGNOSTICS",
+                                        "value": "true"
                                     },{
                                         "name": "JENKINS_URL",
                                         "value": "https://${ROUTE_HOST}${ROUTE_PATH}"

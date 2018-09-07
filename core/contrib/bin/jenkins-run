@@ -16,10 +16,43 @@ JENKINS_CONFIG=/etc/sysconfig/jenkins
 [ -f "$JENKINS_CONFIG" ] && . "$JENKINS_CONFIG"
 
 JENKINS_JAVA_CMD="/usr/bin/java"
-JENKINS_JAVA_OPTIONS="${JENKINS_JAVA_OPTIONS:--XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap}"
+
+if [[ -z "${JAVA_TOOL_OPTIONS}" ]]; then
+  # these options will automatically be picked up by any JVM process but can
+  # be overridden on that process' command line.
+  JAVA_TOOL_OPTIONS="-XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap -Dsun.zip.disableMemoryMapping=true"
+  export JAVA_TOOL_OPTIONS
+fi
+
+if [[ -z "$JAVA_GC_OPTS" ]]; then
+  # See https://developers.redhat.com/blog/2014/07/22/dude-wheres-my-paas-memory-tuning-javas-footprint-in-openshift-part-2/ .
+  # The values are aggressively set with the intention of relaxing GC CPU time
+  # restrictions to enable it to free as much as possible, as well as
+  # encouraging the GC to free unused heap memory back to the OS.
+  JAVA_GC_OPTS="-XX:MaxRAMFraction=2 -XX:+UseParallelGC -XX:MinHeapFreeRatio=5 -XX:MaxHeapFreeRatio=10 -XX:GCTimeRatio=4 -XX:AdaptiveSizePolicyWeight=90"
+fi
+
+if [[ "${USE_JAVA_DIAGNOSTICS}" ]]; then
+  JAVA_DIAGNOSTICS="-XX:NativeMemoryTracking=summary -XX:+PrintGC -XX:+PrintGCDateStamps -XX:+PrintGCTimeStamps -XX:+UnlockDiagnosticVMOptions"
+fi
+
+if [[ -z "${JENKINS_OPTIONS}" ]]; then
+  JENKINS_OPTIONS="-Duser.timezone=America/Vancouver -Dhudson.model.DirectoryBrowserSupport.CSP= -Dhudson.model.UpdateCenter.never=true -Dhudson.Util.noSymLink=true -Djenkins.model.Jenkins.buildsDir=\${JENKINS_HOME}/builds/\${ITEM_FULL_NAME}"
+fi
+
+if [[ -z "${JENKINS_JAVA_OPTIONS}" ]]; then
+    JENKINS_JAVA_OPTIONS="-XshowSettings:vm $JAVA_GC_OPTS $JAVA_DIAGNOSTICS -Dfile.encoding=UTF8 -Djavamelody.displayed-counters=log,error -XX:ErrorFile=/var/lib/jenkins/logs/jvm.error.log $JENKINS_OPTIONS"
+fi
+
+echo "JAVA_GC_OPTS=${JAVA_GC_OPTS}"
+echo "JAVA_DIAGNOSTICS=${JAVA_DIAGNOSTICS}"
+echo "JENKINS_OPTIONS=${JENKINS_OPTIONS}"
+echo "JENKINS_JAVA_OPTIONS=${JENKINS_JAVA_OPTIONS}"
+
+#JENKINS_JAVA_OPTIONS="${JENKINS_JAVA_OPTIONS:--XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap -XX:MaxRAMFraction=2  -XX:MaxHeapFreeRatio=20 -XX:MinHeapFreeRatio=10}"
 
 
-"${JENKINS_JAVA_CMD}" $JENKINS_JAVA_OPTIONS -XshowSettings:vm -version
+#"${JENKINS_JAVA_CMD}" $JENKINS_JAVA_OPTIONS -XshowSettings:vm -version
 
 #Copy all configuration files to JENKINS_HOME
 rsync -av --no-o --no-g --no-perms --no-acls --no-xattrs --no-super --omit-dir-times $JENKINS_REF_HOME/ $JENKINS_HOME/
@@ -36,9 +69,6 @@ echo "Running Jenkins System Installer(s)"
 
 echo "Running Jenkins Job Installer(s)"
 [ -d "$JENKINS_HOME/jobs" ] && find $JENKINS_HOME/jobs/ -maxdepth 2  -type f -name '*.install.groovy' -print0 | sort -z | xargs -r0 -I '{}' java -cp /var/cache/jenkins/war--daemon/WEB-INF/lib/groovy-all-2.4.11.jar groovy.lang.GroovyShell '{}' '{}'
-
-
-JENKINS_JAVA_OPTIONS="${JENKINS_JAVA_OPTIONS} -Dhudson.model.UpdateCenter.never=true -Dhudson.Util.noSymLink=true -Djenkins.model.Jenkins.buildsDir=\${JENKINS_HOME}/builds/\${ITEM_FULL_NAME}"
 
 
 JAVA_CMD="$JENKINS_JAVA_CMD $JENKINS_JAVA_OPTIONS -Djenkins.install.runSetupWizard=false -DJENKINS_HOME=$JENKINS_HOME -jar $JENKINS_WAR"
