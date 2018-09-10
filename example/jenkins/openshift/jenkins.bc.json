@@ -243,7 +243,7 @@
                         "uri": "${SOURCE_REPOSITORY_URL}",
                         "ref": "${SOURCE_REPOSITORY_REF}"
                     },
-                    "contextDir": "instance"
+                    "contextDir": "exaple/openshift/instance"
                 },
                 "strategy": {
                     "type": "Docker",
