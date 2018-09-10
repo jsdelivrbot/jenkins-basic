@@ -243,7 +243,7 @@
                         "uri": "${SOURCE_REPOSITORY_URL}",
                         "ref": "${SOURCE_REPOSITORY_REF}"
                     },
-                    "contextDir": "example/openshift/instance"
+                    "contextDir": "example/jenkins/instance"
                 },
                 "strategy": {
                     "type": "Docker",
