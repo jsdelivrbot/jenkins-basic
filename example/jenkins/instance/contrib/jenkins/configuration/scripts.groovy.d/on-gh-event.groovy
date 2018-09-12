@@ -96,7 +96,11 @@ static Map exec(List args, File workingDirectory=null, Appendable stdout=null, A
 
                         if (comment == '/restart' && (commentAuthorAssociation == 'OWNER' || commentAuthorAssociation == 'COLLABORATOR')){
                             //
-                            println "command: ${comment}"
+                            if (branchProjects.size() == 1){
+                                def targetProject=branchProjects[0]
+                                def cause = new hudson.model.Cause.RemoteCause('github.com', "Pull Request Command By '${payload.comment.user.login}'")
+                                jenkins.model.Jenkins.instance.getQueue().schedule(targetProject, 0 cause)
+                            }
                         }else if (comment == '/approve' && (commentAuthorAssociation == 'OWNER' || commentAuthorAssociation == 'COLLABORATOR')){
                             if (branchProjects.size() == 1){
                                 hudson.security.ACL.impersonate(hudson.security.ACL.SYSTEM, {
