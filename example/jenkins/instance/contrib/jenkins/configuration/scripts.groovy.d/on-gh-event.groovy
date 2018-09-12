@@ -79,16 +79,41 @@ static Map exec(List args, File workingDirectory=null, Appendable stdout=null, A
                     //https://developer.github.com/v4/enum/commentauthorassociation/
                     String commentAuthorAssociation = payload.comment.author_association
                     if (comment.charAt(0) == '/'){
-                        if (comment == '/approve' && (commentAuthorAssociation == 'OWNER' || commentAuthorAssociation == 'COLLABORATOR')){
-                            hudson.security.ACL.impersonate(hudson.security.ACL.SYSTEM, {
-                                for (org.jenkinsci.plugins.workflow.support.steps.input.InputAction inputAction : Jenkins.instance.getItemByFullName('cvarjao-jenkins-example-jenkins/PR-1').getLastBuild().getActions(org.jenkinsci.plugins.workflow.support.steps.input.InputAction.class)){
-                                    for (org.jenkinsci.plugins.workflow.support.steps.input.InputStepExecution inputStep:inputAction.getExecutions()){
-                                        if (!inputStep.isSettled()){
-                                            println inputStep.proceed(null)
+                        String jobName= payload.repository.name
+                        String jobPRName =  payload.repository.full_name
+
+                        List projects = Jenkins.instance.getAllItems(org.jenkinsci.plugins.workflow.multibranch.WorkflowMultiBranchProject.class).findAll {
+                            def scmSource=it.getSCMSources()[0]
+                            return payload.repository.owner.login.equalsIgnoreCase(scmSource.getRepoOwner()) && payload.repository.name.equalsIgnoreCase(cmSource.getRepository())
+                        }
+                        List branchProjects = []
+                        projects.each {
+                            def branchProject = it.getItem("PR-${payload.issue.number}")
+                            if (branchProject!=null){
+                                branchProjects.add(branchProject)
+                            }
+                        }
+
+                        if (comment == '/restart' && (commentAuthorAssociation == 'OWNER' || commentAuthorAssociation == 'COLLABORATOR')){
+                            //
+                            println "command: ${comment}"
+                        }else if (comment == '/approve' && (commentAuthorAssociation == 'OWNER' || commentAuthorAssociation == 'COLLABORATOR')){
+                            if (branchProjects.size() == 1){
+                                hudson.security.ACL.impersonate(hudson.security.ACL.SYSTEM, {
+                                    def targetJob=branchProjects[0]
+                                    for (org.jenkinsci.plugins.workflow.support.steps.input.InputAction inputAction : targetJob.getLastBuild().getActions(org.jenkinsci.plugins.workflow.support.steps.input.InputAction.class)){
+                                        for (org.jenkinsci.plugins.workflow.support.steps.input.InputStepExecution inputStep:inputAction.getExecutions()){
+                                            if (!inputStep.isSettled()){
+                                                println inputStep.proceed(null)
+                                            }
                                         }
                                     }
-                                }
-                            } as Runnable )
+                                } as Runnable )
+                            } else if (branchProjects.size() > 1){
+                                throw new RuntimeException("Multiple builds associated with ${payload.issue.pull_request.html_url}\n${branchProjects}")
+                            }else{
+                                println "There is no project or build associated with ${payload.issue.pull_request.html_url}"
+                            }
                         }else{
                             println "command: ${comment}"
                         }
