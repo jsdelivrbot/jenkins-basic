@@ -99,7 +99,7 @@ static Map exec(List args, File workingDirectory=null, Appendable stdout=null, A
                             branchProjects.each {
                                 def targetProject=it
                                 def cause = new hudson.model.Cause.RemoteCause('github.com', "Pull Request Command By '${payload.comment.user.login}'")
-                                jenkins.model.Jenkins.instance.getQueue().schedule(targetProject, 0, cause)
+                                targetProject.scheduleBuild2(0, cause)
                             }
                         }else if (comment == '/approve' && (commentAuthorAssociation == 'OWNER' || commentAuthorAssociation == 'COLLABORATOR')){
                             if (branchProjects.size() > 0){
