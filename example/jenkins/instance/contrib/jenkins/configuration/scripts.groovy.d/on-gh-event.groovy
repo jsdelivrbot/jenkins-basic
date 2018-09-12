@@ -70,6 +70,30 @@ static Map exec(List args, File workingDirectory=null, Appendable stdout=null, A
                     ///Users/cvarjao/Documents/GitHub/mds/
                     exec(['sh', '-c', "pipeline/gradlew --no-build-cache --console=plain --no-daemon -b pipeline/build.gradle cd-clean -Pargs.--config=pipeline/config.groovy -Pargs.--pr=${payload.number}"] , gitWorkDir, binding.variables.out)
                 }
+            }else if ("issue_comment" == ghEventType){
+                def payload = new JsonSlurper().parseText(ghPayload)
+                if ("created" == payload.action && payload.issue.pull_request !=null ){
+                    String comment = payload.comment.body.trim()
+
+                    //OWNER or COLLABORATOR
+                    //https://developer.github.com/v4/enum/commentauthorassociation/
+                    String commentAuthorAssociation = payload.comment.author_association
+                    if (comment.charAt(0) == '/'){
+                        if (comment == '/approve' && (commentAuthorAssociation == 'OWNER' || commentAuthorAssociation == 'COLLABORATOR')){
+                            hudson.security.ACL.impersonate(hudson.security.ACL.SYSTEM, {
+                                for (org.jenkinsci.plugins.workflow.support.steps.input.InputAction inputAction : Jenkins.instance.getItemByFullName('cvarjao-jenkins-example-jenkins/PR-1').getLastBuild().getActions(org.jenkinsci.plugins.workflow.support.steps.input.InputAction.class)){
+                                    for (org.jenkinsci.plugins.workflow.support.steps.input.InputStepExecution inputStep:inputAction.getExecutions()){
+                                        if (!inputStep.isSettled()){
+                                            println inputStep.proceed(null)
+                                        }
+                                    }
+                                }
+                            } as Runnable )
+                        }else{
+                            println "command: ${comment}"
+                        }
+                    }
+                }
             }
         }finally{
             exec(['rm', '-rf', workDir.getAbsolutePath()])

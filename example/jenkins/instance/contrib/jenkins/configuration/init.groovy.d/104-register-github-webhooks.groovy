@@ -22,7 +22,7 @@ if ('prod'.equalsIgnoreCase(System.getenv('ENV_NAME'))){
                     org.kohsuke.github.GHRepository ghRepository = github.getRepository(fullName);
                     Map hooks =[
                         'github-webhook':['url':"${jenkinsUrl}github-webhook/", 'events':[org.kohsuke.github.GHEvent.PULL_REQUEST, org.kohsuke.github.GHEvent.PUSH]],
-                        'generic-webhook-trigger.0':['url':"${jenkinsUrl}generic-webhook-trigger/invoke?token=${genericWebHookTriggerToken}", 'events':[org.kohsuke.github.GHEvent.PULL_REQUEST]]
+                        'generic-webhook-trigger.0':['url':"${jenkinsUrl}generic-webhook-trigger/invoke?token=${genericWebHookTriggerToken}", 'events':[org.kohsuke.github.GHEvent.PULL_REQUEST, org.kohsuke.github.GHEvent.ISSUE_COMMENT]]
                     ]
                     for (def hook:ghRepository.getHooks()){
                         //println hook
