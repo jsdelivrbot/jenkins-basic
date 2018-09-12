@@ -96,25 +96,24 @@ static Map exec(List args, File workingDirectory=null, Appendable stdout=null, A
 
                         if (comment == '/restart' && (commentAuthorAssociation == 'OWNER' || commentAuthorAssociation == 'COLLABORATOR')){
                             //
-                            if (branchProjects.size() == 1){
-                                def targetProject=branchProjects[0]
+                            branchProjects.each {
+                                def targetProject=it
                                 def cause = new hudson.model.Cause.RemoteCause('github.com', "Pull Request Command By '${payload.comment.user.login}'")
                                 jenkins.model.Jenkins.instance.getQueue().schedule(targetProject, 0 cause)
                             }
                         }else if (comment == '/approve' && (commentAuthorAssociation == 'OWNER' || commentAuthorAssociation == 'COLLABORATOR')){
-                            if (branchProjects.size() == 1){
-                                hudson.security.ACL.impersonate(hudson.security.ACL.SYSTEM, {
-                                    def targetJob=branchProjects[0]
-                                    for (org.jenkinsci.plugins.workflow.support.steps.input.InputAction inputAction : targetJob.getLastBuild().getActions(org.jenkinsci.plugins.workflow.support.steps.input.InputAction.class)){
-                                        for (org.jenkinsci.plugins.workflow.support.steps.input.InputStepExecution inputStep:inputAction.getExecutions()){
-                                            if (!inputStep.isSettled()){
-                                                println inputStep.proceed(null)
+                            if (branchProjects.size() > 0){
+                                branchProjects.each { targetJob ->
+                                    hudson.security.ACL.impersonate(hudson.security.ACL.SYSTEM, {
+                                        for (org.jenkinsci.plugins.workflow.support.steps.input.InputAction inputAction : targetJob.getLastBuild().getActions(org.jenkinsci.plugins.workflow.support.steps.input.InputAction.class)){
+                                            for (org.jenkinsci.plugins.workflow.support.steps.input.InputStepExecution inputStep:inputAction.getExecutions()){
+                                                if (!inputStep.isSettled()){
+                                                    println inputStep.proceed(null)
+                                                }
                                             }
                                         }
-                                    }
-                                } as Runnable )
-                            } else if (branchProjects.size() > 1){
-                                throw new RuntimeException("Multiple builds associated with ${payload.issue.pull_request.html_url}\n${branchProjects}")
+                                    } as Runnable )
+                                }
                             }else{
                                 println "There is no project or build associated with ${payload.issue.pull_request.html_url}"
                             }
