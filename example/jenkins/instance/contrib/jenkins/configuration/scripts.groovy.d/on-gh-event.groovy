@@ -84,7 +84,7 @@ static Map exec(List args, File workingDirectory=null, Appendable stdout=null, A
 
                         List projects = jenkins.model.Jenkins.instance.getAllItems(org.jenkinsci.plugins.workflow.multibranch.WorkflowMultiBranchProject.class).findAll {
                             def scmSource=it.getSCMSources()[0]
-                            return payload.repository.owner.login.equalsIgnoreCase(scmSource.getRepoOwner()) && payload.repository.name.equalsIgnoreCase(cmSource.getRepository())
+                            return payload.repository.owner.login.equalsIgnoreCase(scmSource.getRepoOwner()) && payload.repository.name.equalsIgnoreCase(scmSource.getRepository())
                         }
                         List branchProjects = []
                         projects.each {
