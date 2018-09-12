@@ -82,7 +82,7 @@ static Map exec(List args, File workingDirectory=null, Appendable stdout=null, A
                         String jobName= payload.repository.name
                         String jobPRName =  payload.repository.full_name
 
-                        List projects = Jenkins.instance.getAllItems(org.jenkinsci.plugins.workflow.multibranch.WorkflowMultiBranchProject.class).findAll {
+                        List projects = jenkins.model.Jenkins.instance.getAllItems(org.jenkinsci.plugins.workflow.multibranch.WorkflowMultiBranchProject.class).findAll {
                             def scmSource=it.getSCMSources()[0]
                             return payload.repository.owner.login.equalsIgnoreCase(scmSource.getRepoOwner()) && payload.repository.name.equalsIgnoreCase(cmSource.getRepository())
                         }
