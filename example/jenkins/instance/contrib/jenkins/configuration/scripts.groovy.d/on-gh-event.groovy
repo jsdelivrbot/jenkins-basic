@@ -79,6 +79,7 @@ static Map exec(List args, File workingDirectory=null, Appendable stdout=null, A
                     //https://developer.github.com/v4/enum/commentauthorassociation/
                     String commentAuthorAssociation = payload.comment.author_association
                     if (comment.charAt(0) == '/'){
+                        println "command: ${comment}"
                         String jobName= payload.repository.name
                         String jobPRName =  payload.repository.full_name
 
@@ -99,7 +100,7 @@ static Map exec(List args, File workingDirectory=null, Appendable stdout=null, A
                             branchProjects.each {
                                 def targetProject=it
                                 def cause = new hudson.model.Cause.RemoteCause('github.com', "Pull Request Command By '${payload.comment.user.login}'")
-                                targetProject.scheduleBuild2(0, cause)
+                                targetProject.scheduleBuild(0, cause)
                             }
                         }else if (comment == '/approve' && (commentAuthorAssociation == 'OWNER' || commentAuthorAssociation == 'COLLABORATOR')){
                             if (branchProjects.size() > 0){
@@ -117,8 +118,6 @@ static Map exec(List args, File workingDirectory=null, Appendable stdout=null, A
                             }else{
                                 println "There is no project or build associated with ${payload.issue.pull_request.html_url}"
                             }
-                        }else{
-                            println "command: ${comment}"
                         }
                     }
                 }
