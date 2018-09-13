@@ -105,15 +105,17 @@ static Map exec(List args, File workingDirectory=null, Appendable stdout=null, A
                         }else if (comment == '/approve' && (commentAuthorAssociation == 'OWNER' || commentAuthorAssociation == 'COLLABORATOR')){
                             if (branchProjects.size() > 0){
                                 branchProjects.each { targetJob ->
-                                    hudson.security.ACL.impersonate(hudson.security.ACL.SYSTEM, {
-                                        for (org.jenkinsci.plugins.workflow.support.steps.input.InputAction inputAction : targetJob.getLastBuild().getActions(org.jenkinsci.plugins.workflow.support.steps.input.InputAction.class)){
-                                            for (org.jenkinsci.plugins.workflow.support.steps.input.InputStepExecution inputStep:inputAction.getExecutions()){
-                                                if (!inputStep.isSettled()){
-                                                    println inputStep.proceed(null)
+                                    if (targetJob.getLastBuild()){
+                                        hudson.security.ACL.impersonate(hudson.security.ACL.SYSTEM, {
+                                            for (org.jenkinsci.plugins.workflow.support.steps.input.InputAction inputAction : targetJob.getLastBuild().getActions(org.jenkinsci.plugins.workflow.support.steps.input.InputAction.class)){
+                                                for (org.jenkinsci.plugins.workflow.support.steps.input.InputStepExecution inputStep:inputAction.getExecutions()){
+                                                    if (!inputStep.isSettled()){
+                                                        println inputStep.proceed(null)
+                                                    }
                                                 }
                                             }
-                                        }
-                                    } as Runnable )
+                                        } as Runnable )
+                                    }
                                 }
                             }else{
                                 println "There is no project or build associated with ${payload.issue.pull_request.html_url}"

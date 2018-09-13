@@ -217,7 +217,7 @@
                     "spec": {
                         "volumes": [
                             {
-                                "name": "jenkins-home",
+                                "name": "jenkins-jobs",
                                 "persistentVolumeClaim": {
                                     "claimName": "${NAME}${SUFFIX}"
                                 }
@@ -300,6 +300,11 @@
                                     }
                                 ],
                                 "volumeMounts": [
+                                    {
+                                        "name": "jenkins-jobs",
+                                        "readOnly": false,
+                                        "mountPath": "/var/lib/jenkins/jobs"
+                                    },
                                     {
                                         "name": "pod-metadata",
                                         "mountPath": "/var/run/pod"
@@ -455,7 +460,7 @@
                                 "command":[
                                     "bash",
                                     "-c",
-                                    "cd $HOME && java -XshowSettings:vm -version && exec java -jar /usr/lib/jenkins/swarm-client.jar -name \"$(cat /etc/hostname)\" -deleteExistingClients -fsroot \"$JENKINS_HOME/$(cat /etc/hostname)\" -master http://$JENKINS_MASTER_SERVICE:8080 -disableSslVerification -username  \"$(cat /var/run/secrets/jenkins-slave-user/username)\" -passwordFile /var/run/secrets/jenkins-slave-user/password -description \"$(cat /etc/hostname)\" -executors 2 -labels 'Linux rhel rhel7 build test deploy light' -mode 'normal' -retry 10 -tunnel $JENKINS_MASTER_SERVICE:50000 -disableClientsUniqueId"
+                                    "cd $HOME && java -XshowSettings:vm -version && exec java -jar /usr/lib/jenkins/swarm-client.jar -name \"$(cat /etc/hostname)\" -deleteExistingClients -fsroot \"$JENKINS_HOME/$(cat /etc/hostname)\" -master http://$JENKINS_MASTER_SERVICE:8080 -disableSslVerification -username  \"$(cat /var/run/secrets/jenkins-slave-user/username)\" -passwordFile /var/run/secrets/jenkins-slave-user/password -description \"$(cat /etc/hostname)\" -executors 3 -labels 'Linux rhel rhel7 build test deploy light' -mode 'normal' -retry 10 -tunnel $JENKINS_MASTER_SERVICE:50000 -disableClientsUniqueId"
                                 ],
                                 "ports": [
                                     {
