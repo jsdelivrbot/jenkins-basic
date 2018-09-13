@@ -2,3 +2,4 @@
 base/contrib/jenkins/configuration/jenkins.model.JenkinsLocationConfiguration.xml
 .groovy
 README.local.md
+.DS_Store
