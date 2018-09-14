@@ -22,7 +22,7 @@
         <hudson.plugins.groovy.SystemGroovy plugin="groovy@2.0">
             <source class="hudson.plugins.groovy.StringSystemScriptSource">
                 <script plugin="script-security@1.41">
-                    <script>println &apos;Hello World&apos;;</script>
+                    <script>evaluate(new File(System.getenv()[&apos;JENKINS_HOME&apos;], &apos;scripts.groovy.d/on-startup.groovy&apos;))</script>
                     <sandbox>false</sandbox>
                 </script>
             </source>
