@@ -16,6 +16,26 @@ die () {
     exit 1
 }
 
+# OS specific support (must be 'true' or 'false').
+cygwin=false
+msys=false
+darwin=false
+nonstop=false
+case "`uname`" in
+  CYGWIN* )
+    cygwin=true
+    ;;
+  Darwin* )
+    darwin=true
+    ;;
+  MINGW* )
+    msys=true
+    ;;
+  NONSTOP* )
+    nonstop=true
+    ;;
+esac
+
 if [ ! -n "$JAVACMD" ] ; then
     if [ -n "$__JAVA_HOME" ] ; then
         if [ -x "$JAVA_HOME/jre/sh/java" ] ; then
@@ -63,9 +83,9 @@ if [ ! -n "$JAVACMD" ] ; then
         export JAVA_OPTS="${JAVA_OPTS} --add-modules java.xml.bind --add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.lang.invoke=ALL-UNNAMED --show-version"
     fi
 fi
-
-echo "JAVACMD=${JAVACMD}"
 export JAVACMD
+echo "JAVACMD=${JAVACMD}"
+
 
 GROOVY_DOWNLOAD_URL='https://dl.bintray.com/groovy/maven/apache-groovy-binary-2.5.2.zip'
 GROOVY_DOWNLOAD_FILE="/tmp/~`basename "$GROOVY_DOWNLOAD_URL"`"
