@@ -67,10 +67,14 @@ if [ ! -n "$JAVACMD" ] ; then
             curl -sL -o "${JDK_DOWNLOAD_FILE_SHA256}" "${JDK_DOWNLOAD_URL_SHA256}"
             echo "`cat "${JDK_DOWNLOAD_FILE_SHA256}"`  ${JDK_DOWNLOAD_FILE}" > "${JDK_DOWNLOAD_FILE}.checksum"
 
-            shasum -a 256 -c -s "${JDK_DOWNLOAD_FILE}.checksum" > /dev/null || ( rm -f "${JDK_DOWNLOAD_FILE}"; rm -rf "${JDK_DIR}")
-
+            if $darwin; then
+                shasum -a 256 -c --status "${JDK_DOWNLOAD_FILE}.checksum" > /dev/null || ( rm -f "${JDK_DOWNLOAD_FILE}"; rm -rf "${JDK_DIR}")
+            else
+                sha256sum -c --status "${JDK_DOWNLOAD_FILE}.checksum" > /dev/null || ( rm -f "${JDK_DOWNLOAD_FILE}"; rm -rf "${JDK_DIR}")
+            fi
+            
             if [ ! -f "${JDK_DOWNLOAD_FILE}" ] ; then
-                info "Downloading JDK"
+                info "Downloading JDK - ${JDK_DOWNLOAD_URL}"
                 curl -sL -o "${JDK_DOWNLOAD_FILE}" "${JDK_DOWNLOAD_URL}"
             fi
 
