@@ -42,8 +42,8 @@ static Map exec(List args, Appendable stdout=null, Appendable stderr=null, Closu
         def configXmlFile = installFile.substring(0, installFile.length() - '.install.groovy'.length())
         def configXmlTemplateFile = configXmlFile + '.template'
 
-        println "configXmlFile:${configXmlFile}"
-        println "configXmlTemplateFile:${configXmlTemplateFile}"
+        //println "configXmlFile:${configXmlFile}"
+        //println "configXmlTemplateFile:${configXmlTemplateFile}"
 
         new File( configXmlFile ).withWriter { w ->
             new File(configXmlTemplateFile).eachLine { line ->
