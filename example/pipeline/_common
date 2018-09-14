@@ -82,7 +82,7 @@ if [ ! -n "$JAVACMD" ] ; then
             mkdir -p "${JDK_DIR}"
             tar -xzf "${JDK_DOWNLOAD_FILE}" -C "${JDK_DIR}"
         fi
-        JAVACMD="`find "${JDK_DIR}" -type f -name 'java' -perm +111`"
+        JAVACMD="`find "${JDK_DIR}" -type f -name 'java'`"
         #for java 10
         export JAVA_OPTS="${JAVA_OPTS} --add-modules java.xml.bind --add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.lang.invoke=ALL-UNNAMED --show-version"
     fi
