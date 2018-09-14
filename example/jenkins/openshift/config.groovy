@@ -34,7 +34,7 @@ app {
         suffix = "-build-${opt.'pr'}"
         id = "${app.name}${app.build.suffix}"
         version = "${app.build.env.name}-v${opt.'pr'}"
-        name = "${app.name}" //
+        name = "${opt.'build-name'?:app.name}"
 
         namespace = app.namespaces.'build'.namespace
         timeoutInSeconds = 60*20 // 20 minutes
@@ -58,8 +58,8 @@ app {
             id = vars.deployment.env.id
         }
         suffix = "${vars.deployment.suffix}" // app (unique name across all deployments int he namespace)
-        version = "${app.deployment.env.name}-v${opt.'pr'}" //app-version  and tag
-        name = "${app.name}" //app-name   (same name accross all deployments)
+        version = "${vars.deployment.version}" //app-version  and tag
+        name = "${vars.deployment.name}"
         id = "${app.deployment.name}${app.deployment.suffix}" // app (unique name across all deployments int he namespace)
 
         namespace = "${vars.deployment.namespace}"
@@ -71,6 +71,7 @@ app {
                     'file':'example/jenkins/openshift/jenkins.dc.json',
                     'params':[
                         'NAME': "${app.deployment.name}",
+                        'BC_NAME': "${app.build.name}",
                         'SUFFIX': "${app.deployment.suffix}",
                         'VERSION': app.deployment.version,
                         'ROUTE_HOST': app.deployment.host,
@@ -91,8 +92,9 @@ environments {
                     id = "pr-${opt.'pr'}"
                 }
                 suffix = "-dev-${opt.'pr'}"
-                name = "${app.name}"
+                name = "${opt.'deployment-name'?:app.name}"
                 namespace = app.namespaces[env.name].namespace
+                version = "${vars.deployment.name}-${vars.deployment.env.name}-v${opt.'pr'}" //app-version  and tag
             }
         }
     }
@@ -104,8 +106,9 @@ environments {
                     id = "pr-${opt.'pr'}"
                 }
                 suffix = '-test'
-                name = "${app.name}"
+                name = "${opt.'deployment-name'?:app.name}"
                 namespace = app.namespaces[env.name].namespace
+                version = "${vars.deployment.name}-${vars.deployment.env.name}" //app-version  and tag
             }
         }
     }
@@ -118,8 +121,9 @@ environments {
                 }
                 suffix = ''
                 id = "${app.name}${vars.deployment.suffix}"
-                name = "${app.name}"
+                name = "${opt.'deployment-name'?:app.name}"
                 namespace = app.namespaces[env.name].namespace
+                version = "${vars.deployment.name}-${vars.deployment.env.name}" //app-version  and tag
             }
         }
     }

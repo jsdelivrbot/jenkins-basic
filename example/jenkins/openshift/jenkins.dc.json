@@ -13,6 +13,12 @@
             "value": "jenkins-atomic",
             "required": true
         },{
+            "name": "BC_NAME",
+            "displayName": "Name",
+            "description": "A name used for all objects",
+            "value": "jenkins-atomic",
+            "required": true
+        },{
             "name": "SUFFIX",
             "displayName": "Suffix",
             "description": "A name suffix used for all objects",
@@ -61,8 +67,11 @@
             "kind": "ImageStream",
             "apiVersion": "v1",
             "metadata": {
-                "name": "${NAME}",
-                "creationTimestamp": null
+                "name": "${BC_NAME}",
+                "creationTimestamp": null,
+                "labels": {
+                    "shared": "true"
+                }
             },
             "spec": {
                 "lookupPolicy": {
@@ -193,7 +202,7 @@
                             "containerNames": ["jenkins"],
                             "from": {
                                 "kind": "ImageStreamTag",
-                                "name": "${NAME}:${VERSION}"
+                                "name": "${BC_NAME}:${VERSION}"
                             }
                         }
                     },
@@ -370,7 +379,7 @@
                             "containerNames": ["jenkins"],
                             "from": {
                                 "kind": "ImageStreamTag",
-                                "name": "${NAME}:${VERSION}"
+                                "name": "${BC_NAME}:${VERSION}"
                             }
                         }
                     },
