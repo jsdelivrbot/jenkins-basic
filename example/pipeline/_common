@@ -64,6 +64,7 @@ if [ ! -n "$JAVACMD" ] ; then
     fi
 fi
 
+echo "JAVACMD=${JAVACMD}"
 export JAVACMD
 
 GROOVY_DOWNLOAD_URL='https://dl.bintray.com/groovy/maven/apache-groovy-binary-2.5.2.zip'
@@ -82,10 +83,7 @@ fi
 #find "${GROOVY_DIR}/" -type f -name 'groovy' -perm +111
 GROOVYCMD="${GROOVY_DIR}/groovy-2.5.2/bin/groovy"
 
-#echo "JAVACMD=${JAVACMD}"
-#export JAVACMD
-
-
+echo "GROOVYCMD=${GROOVYCMD}"
 
 OCP_PIPELINE_VERSION='0.0.4'
 OCP_PIPELINE_DOWNLOAD_URL="https://dl.bintray.com/cvarjao/maven/ca/bc/gov/devops/cd/pipeline/ocp-pipeline/${OCP_PIPELINE_VERSION}/ocp-pipeline-${OCP_PIPELINE_VERSION}.jar"
